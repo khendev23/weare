@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>WeAre</title>
+</head>
+<div layout:fragment="content">
+    <section>
+        <div style="padding: 150px 80px 0 80px;">
+            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="5000" style="width: 100%; overflow:hidden;">
+                        <img th:src="@{/assets/img/weare/weare1.jpg}" class="d-block w-100" alt="..." >
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img th:src="@{/assets/img/weare/weare3.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img th:src="@{/assets/img/weare/weare4.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img th:src="@{/assets/img/weare/weare5.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="5000">
+                        <img th:src="@{/assets/img/weare/weare7.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div style="padding: 150px 15% 220px 25%;">
+            <h3 style="font-size: 30px; font-weight: 800;">공지사항</h3>
+            <br>
+            <div style="display: flex;">
+                <div style="border: 1px solid black; width: 400px; height: 200px; padding: 30px 0 10px 30px;">
+                    <p style="font-size: 22px; font-weight: 700;">12월 2일 리더 수련회</p>
+                    <br><br>
+                    <p>지민규 총무</p>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div style="border: 1px solid black; width: 400px; height: 200px;">
+                    dkdk
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div style="border: 1px solid black; width: 400px; height: 200px;">
+                    dkdk
+                </div>
+            </div>
+        </div>
+    </section>
+    <section style="background-color: lightgray;">
+        <div style="padding: 150px 15% 170px 25%;">
+            <h3 style="font-size: 30px; font-weight: 800;">이번 주 말씀 켈리</h3>
+            <div style="display: flex; justify-content: center;">
+                <img th:src="@{/assets/img/weare/kelly.jpg}" alt="" style="width: 45%; margin-right: 240px;">
+            </div>
+        </div>
+    </section>
+</div>
+</html>

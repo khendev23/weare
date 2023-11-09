@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="header">
+    <header style="height: 6%; ">
+        <nav class="navbar navbar-expand-lg fixed-top" id="mainNav" style="height: 6%; background-color: #2c3e50">
+            <div style="margin-left: 5%;">
+                <a class="navbar-brand" href="#page-top" style="color: white; font-size: 30px; font-weight: 800;">
+                    <img th:src="@{/assets/img/logo/eplogo.png}" style="width: 200px;">
+                    &nbsp; WeAre
+                </a>
+            </div>
+            <div style="margin-left: 21%;">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" th:href="@{home}" style="color: white; font-size: 21px; font-weight: 800;">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color: white; font-size: 21px; font-weight: 800;">우리는 청년부</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="weareintro.html">우리는 소개</a></li>
+                            <li><a class="dropdown-item" href="memberintro.html">우리는 멤버소개</a></li>
+                            <li><a class="dropdown-item" href="ministryintro.html">우리는 사역소개</a></li>
+                            <hr>
+                            <li><a class="dropdown-item" href="announcement.html">우리는 공지사항</a></li>
+                            <hr>
+                            <li><a class="dropdown-item" th:href="@{2023weare}">2023 우리는</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="worship.html" style="color: white; font-size: 21px; font-weight: 800;">예배</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="signup.html" style="color: white; font-size: 21px; font-weight: 800;">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html" style="color: white; font-size: 21px; font-weight: 800;">로그인</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</div>
+</html>

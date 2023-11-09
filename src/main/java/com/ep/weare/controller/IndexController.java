@@ -13,4 +13,8 @@ public class IndexController {
         return "home";
     }
 
+    @GetMapping("/2023weare")
+    public String weare2023(Model model) {
+        return "user/2023weare";
+    }
 }
