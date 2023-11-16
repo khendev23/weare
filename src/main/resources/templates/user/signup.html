@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default_layout}">
+<head>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <title>WeAre 회원가입</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    </head>
+</head>
+<div layout:fragment="content">
+    <div style="width: 100%; height: 97px; background-color:#2c3e50;"></div>
+    <section style="padding: 5%; background-color:#f1fafb;">
+        <div class="container" style="width: 60%;">
+            <div class="input-form-backgroud row">
+                <div class="input-form col-md-12 mx-auto" style="width: 60%;">
+                    <div style="display: flex; justify-content: center;">
+                        <h3 class="mb-3">회원가입</h3>
+
+                    </div>
+                    <form class="validation-form" name="userCreateForm" th:action="@{/signup/userCreate.do}" th:object="${userEntity}" method="post" onsubmit="return validateForm()">
+                        <div class="row">
+                            <div>
+                                <br>
+                                <div style="display: flex; justify-content: end; line-height: 0.3;">
+                                    <p><span style="color: red;">*</span> 필수입력사항</p>
+                                </div>
+                                <hr>
+                                <br>
+                                <label for="userId">아이디<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" style="width: 60%; height: 40px;" id="userId" name="userId"  th:field="*{userId}"placeholder=" 4~12자의 영문과 숫자를 조합" value="" required>
+                                <button name="idCheckBtn" type="button" style="width: 15%; height: 40px; background-color:white; color: #2c3e50;" onclick="checkDuplicate()">중복확인</button>
+                                <p id="idErr" style="padding-left: 8.5rem; display: none"></p>
+                                <div id="message" style="padding-left: 8.5rem;"></div>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="userPw">비밀번호<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="password" style="width: 60%; height: 40px;" th:field="*{userPw}" placeholder=" 비밀번호를 입력해주세요" value="" required><br>
+                                <p id="pwErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="pwcheck">비밀번호확인<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="password" style="width: 60%; height: 40px; margin-left: 2px;" id="pwcheck" name="pwcheck" placeholder=" 비밀번호를 한번 더 입력해주세요" value="" required><br>
+                                <p id="pwCheckErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="userName">이름<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" style="width: 60%; height: 40px; margin-left: 4px;" th:field="*{userName}" placeholder=" 이름을 입력해주세요" value="" required><br>
+                                <p id="nameErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="birthday">생년월일<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="date" style="width: 60%; height: 40px;" name="birthday" id="birthday" th:field="*{birthday}" required>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="email">이메일<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="email" style="width: 60%; height: 40px; margin-left: 4px;" name="email" id="email" th:field="*{email}" placeholder=" you@example.com" required>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="phone">휴대폰<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="text" style="width: 60%; height: 40px; margin-left: 4px;" name="phone" id="phone" th:field="*{phone}" placeholder=" 숫자만 입력해주세요(-제외)" required><br>
+                                <p id="phoneErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
+                            </div>
+
+                            <div>
+                                <br>
+                                <span>성별<span style="color: red;">*</span></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="male" name="gender" value="남" required> 남
+                                <input type="radio" id="female" name="gender" value="여" required> 여
+                            </div>
+
+                            <div>
+                                <br>
+                                <p>
+                                    주소<span style="color: red;">*</span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="button" style="width: 60%; height: 40px; background-color: white;" onclick="sample4_execDaumPostcode()" value="주소 검색"><br>
+                                </p>
+
+                                <input type="text" style="width: 60%; height: 40px; margin-left: 140px;" id="sample4_roadAddress" name="roadAddress" placeholder="도로명주소">
+                                <br>
+                                <input type="text" style="width: 40%; height: 40px; margin: 6px 0 0 140px;" id="sample4_detailAddress" name="detailAddress" placeholder="상세주소">
+
+
+                                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                                <script>
+                                    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+                                    function sample4_execDaumPostcode() {
+                                        new daum.Postcode({
+                                            oncomplete: function(data) {
+                                                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                                                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                                                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                                                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                                                var extraRoadAddr = ''; // 참고 항목 변수
+
+                                                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                                                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                                                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                                                    extraRoadAddr += data.bname;
+                                                }
+                                                // 건물명이 있고, 공동주택일 경우 추가한다.
+                                                if(data.buildingName !== '' && data.apartment === 'Y'){
+                                                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                                                }
+                                                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                                                if(extraRoadAddr !== ''){
+                                                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                                                }
+
+                                                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                                                document.getElementById("sample4_roadAddress").value = roadAddr;
+
+                                                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                                                if(roadAddr !== ''){
+                                                    document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                                                } else {
+                                                    document.getElementById("sample4_extraAddress").value = '';
+                                                }
+
+                                                var guideTextBox = document.getElementById("guide");
+                                                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                                                if(data.autoRoadAddress) {
+                                                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                                                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                                                    guideTextBox.style.display = 'block';
+
+                                                } else if(data.autoJibunAddress) {
+                                                    var expJibunAddr = data.autoJibunAddress;
+                                                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                                                    guideTextBox.style.display = 'block';
+                                                } else {
+                                                    guideTextBox.innerHTML = '';
+                                                    guideTextBox.style.display = 'none';
+                                                }
+                                            }
+                                        }).open();
+                                    }
+                                </script>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="teamName">조<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <select class="custom-select" style="width: 60%; height: 40px; margin-left: 4px;" id="teamName" name="teamName">
+                                    <option value=""></option>
+                                    <option >주은혜주시내조</option>
+                                    <option>예신조</option>
+                                    <option>메신조</option>
+                                    <option>주님의아이들조</option>
+                                    <option>디퓨조</option>
+                                    <option>새가족</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <br>
+                                <label for="msTeamName">사역팀<span style="color: red;">*</span></label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <select class="custom-select" style="width: 60%; height: 40px;" id="msTeamName" name="msTeamName">
+                                    <option value=""></option>
+                                    <option >말씀정리팀</option>
+                                    <option>GPS</option>
+                                    <option>낮은 곳으로</option>
+                                    <option>디자인팀</option>
+                                    <option>새가족</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+                        <hr class="mb-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="aggrement" required>
+                            <label class="custom-control-label" for="aggrement">회원가입은 임원들의 승인이 필요하며, 개인정보 수집 및 이용에 동의합니다.</label>
+                        </div>
+                        <div class="mb-4"></div>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var isDuplicateChecked = false;
+        function checkDuplicate() {
+            var userId = $("#userId").val();
+            console.log(userId);
+
+            // AJAX 요청
+            $.ajax({
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                url: "/weare/signup/checkDuplicatedId.do",
+                data: { "userId": userId },
+                success: function (response) {
+                    console.log("성공");
+                    var messageElement = $("#message");
+
+                    if (response) {
+                        messageElement.html("이미 존재하는 아이디입니다.").css("color", "red");
+                    } else {
+                        messageElement.html("사용 가능한 아이디입니다.").css("color", "blue");
+                        isDuplicateChecked = true;
+                        // 여기에 사용 가능한 아이디에 대한 추가 동작을 수행할 수 있습니다.
+                    }
+                }
+            });
+        }
+
+        const userId = document.querySelector("#userId");
+        const userPw = document.querySelector("#userPw");
+        const pwcheck = document.querySelector("#pwcheck");
+        const userName = document.querySelector("#userName");
+        const phone = document.querySelector("#phone");
+
+        const idErr = document.querySelector("#idErr");
+        const pwErr = document.querySelector("#pwErr");
+        const pwCheckErr = document.querySelector("#pwCheckErr");
+        const nameErr = document.querySelector("#nameErr");
+        const phoneErr = document.querySelector("#phoneErr");
+
+        function validateForm() {
+            if (!isDuplicateChecked) {
+                alert("아이디 중복 확인을 해주세요.");
+                return false; // 제출을 막음
+            }
+            // 여기에 다른 유효성 검사 로직 추가 가능
+
+            if((!/^[a-z]/.test(userId.value)) || (!/\d/.test(userId.value)) || (!/^.{4,12}$/.test(userId.value))) {
+                alert('아이디가 유효하지 않습니다.');
+                return false; // 이하 코드 실행 방지용
+            };
+
+            if( ((!/\w/.test(userPw.value)) || (!/\d/.test(userPw.value)) || (!/[!@#$%^&*]/.test(userPw.value)) || (!/^.{8,15}$/.test(userPw.value))) ){
+                alert('비밀번호가 유효하지 않습니다.');
+                return false;
+            };
+
+            if( (userPw.value != pwcheck.value) ) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return false;
+            };
+
+            if( ((!/^.{2,}$/.test(userName.value)) || (!/[가-힣]/.test(userName.value))) ) {
+                alert('이름이 유효하지 않습니다.');
+                return false;
+            };
+
+            if( ((!/^(010|011)/.test(phone.value)) || (!/\d/.test(phone.value)) || (!/^.{10,11}$/.test(phone.value))) ) {
+                alert('휴대폰 번호가 유효하지 않습니다.');
+                return false;
+            };
+
+            return true; // 폼이 유효하면 제출
+        }
+
+        // 실시간 유효성 검사
+
+
+        // ID 유효성 검사
+        const validateUserId = () => {
+
+            const value = userId.value;
+
+            const idValidations = [
+                {re : /^[a-z]/, msg : '첫글자는 반드시 영어소문자로 이루어져야합니다.'},
+                {re : /\d/, msg : '숫자를 하나이상 포함해야합니다.'},
+                {re : /^.{4,12}$/, msg : '아이디 길이는 4~12자리 입니다.'},
+            ];
+
+            const result = idValidations.every(({re, msg}) => {
+                if(!re.test(value)) {
+                    idErr.innerHTML = msg;
+                    idErr.style.display = 'inline';
+                    return false; // forEach용 break
+                }
+                return true;
+            });
+
+            if(result || value=="")
+                idErr.style.display = 'none';
+        };
+        userId.oninput = validateUserId;
+
+        // 비밀번호 유효성 검사
+        const validateUserPassword = () => {
+            const value = userPw.value;
+
+            const pwdValidations = [
+                {re : /\w/, msg : '문자를 하나이상 포함해야합니다.'},
+                {re : /\d/, msg : '숫자를 하나이상 포함해야합니다.'},
+                {re : /[!@#$%^&*]/, msg : '특수문자(!@#$%^&*)를 하나이상 포함해야합니다.'},
+                {re : /^.{8,15}$/, msg : '비밀번호 길이는 8~15자리 입니다.'},
+            ];
+
+            const result = pwdValidations.every(({re, msg}) => {
+                if(!re.test(value)) {
+                    pwErr.innerHTML = msg;
+                    pwErr.style.display = 'inline';
+                    return false; // forEach용 break
+                }
+                return true;
+            });
+
+            if(result || value=="")
+                pwErr.style.display = 'none';
+
+        };
+        userPw.oninput = validateUserPassword;
+
+        // 비밀번호 일치 검사
+        const validateUserPasswordCheck = () => {
+            const value = pwcheck.value;
+
+            if((value === userPw.value) || (value === "")) {
+                pwCheckErr.style.display = 'none';
+            } else {
+                pwCheckErr.innerHTML = '비밀번호가 일치하지 않습니다.';
+                pwCheckErr.style.display = 'inline';
+            };
+
+        };
+        pwcheck.oninput = validateUserPasswordCheck;
+
+        // 이름 검사
+        const validateUserName = () => {
+            const value = userName.value;
+
+            const nameValidations = [
+                {re : /^.{2,}$/, msg : '이름 길이는 2글자 이상 입니다.'},
+                {re : /[가-힣]/, msg : '한글만 입력가능합니다.'},
+            ];
+
+            const result = nameValidations.every(({re, msg}) => {
+                if(!re.test(value)) {
+                    nameErr.innerHTML = msg;
+                    nameErr.style.display = 'inline';
+                    return false; // forEach용 break
+                }
+                return true;
+            });
+
+            if(result || value=="")
+                nameErr.style.display = 'none';
+        };
+        userName.oninput = validateUserName;
+
+        //전화번호 검사
+        const validateTel = () => {
+            const value = phone.value;
+
+            const phoneValidations = [
+                {re : /^(010|011)/, msg : '유효한 번호가 아닙니다.'},
+                {re : /\d/, msg : '숫자만 입력가능.'},
+                {re : /^.{10,11}$/, msg : '10~11 자리 입력해주세요.'},
+            ];
+
+            const result = phoneValidations.every(({re, msg}) => {
+                if(!re.test(value)) {
+                    phoneErr.innerHTML = msg;
+                    phoneErr.style.display = 'inline';
+                    return false; // forEach용 break
+                }
+                return true;
+            });
+
+            if(result || value=="") {
+                phoneErr.style.display = 'none';
+            };
+
+        };
+        phone.oninput = validateTel;
+    </script>
+</div>
+</html>

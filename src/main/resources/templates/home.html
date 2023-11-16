@@ -1,44 +1,37 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/default_layout}">
 <head>
     <title>WeAre</title>
 </head>
 <div layout:fragment="content">
-    <section>
-        <div style="padding: 150px 80px 0 80px;">
-            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <section id="home" class="header" th:style="'background-image: url(/assets/img/header.jpg);'">
+        <div class="overlay"></div>
+
+        <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
+            <div class="container">
                 <div class="carousel-inner">
-                    <div class="carousel-item active" data-bs-interval="5000" style="width: 100%; overflow:hidden;">
-                        <img th:src="@{/assets/img/weare/weare1.jpg}" class="d-block w-100" alt="..." >
-                    </div>
-                    <div class="carousel-item" data-bs-interval="5000">
-                        <img th:src="@{/assets/img/weare/weare3.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
-                    </div>
-                    <div class="carousel-item" data-bs-interval="5000">
-                        <img th:src="@{/assets/img/weare/weare4.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
-                    </div>
-                    <div class="carousel-item" data-bs-interval="5000">
-                        <img th:src="@{/assets/img/weare/weare5.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
-                    </div>
-                    <div class="carousel-item" data-bs-interval="5000">
-                        <img th:src="@{/assets/img/weare/weare7.jpg}" class="d-block" alt="..." style="width: 100%; height: 80%; overflow:hidden;">
+                    <div class="carousel-item active">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1 class="carousel-title">'We Are'<br>은혜와 평강교회 청년부</h1>
+                        </div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+            </div>
+        </div>
+
+        <div class="infos container mb-4 mb-md-2">
+            <div class="title">
+                <h5>요한3서 1장 2절</h5>
+                <p class="font-small" style="color: white;">사랑하는 자여 네 영혼이 잘됨 같이 네가 범사에 잘되고 강건하기를 내가 간구하노라</p>
             </div>
         </div>
     </section>
-    <section>
+
+    <section th:if="${userCheck == T(com.ep.weare.user.entity.UserCheck).o}" sec:authorize="isAuthenticated()">
         <div style="padding: 150px 15% 220px 25%;">
             <h3 style="font-size: 30px; font-weight: 800;">공지사항</h3>
             <br>
@@ -59,11 +52,325 @@
             </div>
         </div>
     </section>
+
     <section style="background-color: lightgray;">
-        <div style="padding: 150px 15% 170px 25%;">
-            <h3 style="font-size: 30px; font-weight: 800;">이번 주 말씀 켈리</h3>
+        <div style="padding: 150px 15% 170px 15%;">
             <div style="display: flex; justify-content: center;">
-                <img th:src="@{/assets/img/weare/kelly.jpg}" alt="" style="width: 45%; margin-right: 240px;">
+                <div style="text-align: center">
+                    <h3 style="font-size: 30px; font-weight: 800;">이번 주 말씀 켈리</h3>
+                    <img th:src="@{/assets/img/weare/kelly2.jpg}" alt="" style="width: 60%;">
+                </div>
+                <div style="text-align: center; ">
+                    <h3 style="font-size: 30px; font-weight: 800;">지난 주 말씀 켈리</h3>
+                    <img th:src="@{/assets/img/weare/kelly.jpg}" alt="" style="width: 60%;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:if="${userCheck == T(com.ep.weare.user.entity.UserCheck).o}" sec:authorize="isAuthenticated()" class="section" id="testmonial" style="background-color:#f1fafb;">
+        <div class="container">
+            <div style="line-height: 1.2">
+                <h6 class="xs-font mb-0" style="font-size: 20px;">2023</h6>
+                <h3 class="section-title" style="font-size: 30px;">우리는 청년부 소개</h3>
+            </div>
+
+
+            <div id="owl-testmonial" class="owl-carousel owl-theme mt-4">
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/yena.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">예나 지금이나 예수님의 사랑을 나누는 한예나 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">한예나</h6>
+                            <h6 class="xs-font">우리는 청년부 회장, 말씀정리팀, 예신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/daehan.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">복음으로 심플한 삶을 살고파하는 김대한 입니다</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">김대한</h6>
+                            <h6 class="xs-font">GPS팀, 메신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/grace.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">그리스도의 향기에 물들어 피어오르는 꽃이 은혜입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">이은혜</h6>
+                            <h6 class="xs-font">말씀정리팀, 주은혜주시내조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/haein.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">주사 안아프게 놓는 주가 혜인입니다. (check)</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">주혜인</h6>
+                            <h6 class="xs-font">말씀정리팀, 예신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/hanseul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">저는 하나님께 향한 열정으로 불타는 심장을 가진 장한슬입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">장한슬</h6>
+                            <h6 class="xs-font">디자인팀, 메신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/hangyul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">늘 한결같은 윤한결 입니다. (check)</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">윤한결</h6>
+                            <h6 class="xs-font">낮은곳으로 팀장, 주님의아이들조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/junha.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">까불거리지만 가볍지 않고 진지하지만 무겁지는 않은 유준하 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">유준하</h6>
+                            <h6 class="xs-font">GPS팀, 메신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/junyong.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">겉은 진지 속은 뇌정지 엄준용 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">엄준용</h6>
+                            <h6 class="xs-font">디퓨조 조장, 말씀정리팀</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/mingyu.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">포브스선정 가만히 있을때 가장 맛있는 남자 지민규 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">지민규</h6>
+                            <h6 class="xs-font">우리는 청년부 총무, 메신조 조장, 낮은곳으로</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/seongkeun.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">뚝딱뚝딱 뚝딱이 유파고 유성근 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">유성근</h6>
+                            <h6 class="xs-font">우리는 청년부 서기, 주님의아이들조 조장, GPS팀 팀장</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/sinae.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">청년부의 따뜻한 햇살 같은 황시내 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">황시내</h6>
+                            <h6 class="xs-font">디자인팀 팀장, 주은혜주시내조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/yongwoo.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">은평 비주얼 담당1 김용우 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">김용우</h6>
+                            <h6 class="xs-font">낮은곳으로, 주님의아이들조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/hyunji.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">하나님이 맡겨주신 아이들과 함께 지지고 볶는 장현지 입니다.</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">장현지</h6>
+                            <h6 class="xs-font">디자인팀, 예신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/saehui.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세희:) 우리는’의 금손 주세희 입니다🍀</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">주세희</h6>
+                            <h6 class="xs-font">낮은곳으로, 주은혜주시내조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/hanna.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">흔들림 없는 편안한 이한나 전도사!</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">이한나</h6>
+                            <h6 class="xs-font">은혜와평강교회 전도사, 예신조, 말씀정리팀</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/jiseul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">은평 비주얼 담당2 장지슬 입니다</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">장지슬</h6>
+                            <h6 class="xs-font">메신조, </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/museok.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">청년부 어부 정무석 입니다!</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">정무석</h6>
+                            <h6 class="xs-font">GPS팀, 주님의아이들조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/seojin.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">저는 공군大836기 홍서진 입니다</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">홍서진</h6>
+                            <h6 class="xs-font">GPS팀(예정), 주님의아이들조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/sol.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세요^^ 우리는' 청년회의 푸르른 소나무 윤솔 입니다🌲</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">윤솔</h6>
+                            <h6 class="xs-font">디자인팀, 예신조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/taeyang.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">우리는 동네형 장태양 입니다</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">장태양</h6>
+                            <h6 class="xs-font">말씀정리팀, 디퓨조</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div style="display: flex; justify-content: center">
+                        <img th:src="@{assets/img/people/geonyoung.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <div class="des" style="padding-left: 5%; padding-top: 6%;">
+                            <h5 class="ti-quote-left font-weight-bold"></h5>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세요! '나는 자유해' 메인댄서 이건영 입니다🤠</p>
+                            <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
+
+                            <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
+                            <h6 class="name" style="font-size: 1.3rem;">이건영</h6>
+                            <h6 class="xs-font">새가족</h6>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

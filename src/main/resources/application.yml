@@ -1,6 +1,8 @@
 # tomcat
 server:
   port: 8090
+  servlet:
+    context-path: /weare
 
 
 # spring
@@ -14,11 +16,16 @@ spring:
     url: jdbc:mysql://localhost:3307/weare
     username: root
     password: mysql
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        format_sql: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
 
+# logback
+logging:
+  level:
+    root: info
+    '[com.ep.weare]': debug
