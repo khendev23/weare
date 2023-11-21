@@ -2,6 +2,7 @@ package com.ep.weare.config;
 
 import com.ep.weare.user.service.UserService;
 import com.ep.weare.user.service.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -15,14 +16,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    @Autowired
+
     private UserServiceImpl userService;
+
+
+    private AuthenticationFailureHandler loginFailHandler;
+
+    @Autowired
+    public WebSecurityConfig(UserServiceImpl userService, LoginFailHandler loginFailHandler) {
+        this.userService=userService;
+        this.loginFailHandler=loginFailHandler;
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -66,11 +78,15 @@ public class WebSecurityConfig {
                         new AntPathRequestMatcher("/img/**"),
                         new AntPathRequestMatcher("/home"),
                         new AntPathRequestMatcher("/signup/**"),
-                        new AntPathRequestMatcher("/signupComplete")
+                        new AntPathRequestMatcher("/signupComplete"),
+                        new AntPathRequestMatcher("/login")
                 ).permitAll()
                 .requestMatchers(
                         new AntPathRequestMatcher("/leader/**")
                 ).hasRole("leader")
+                .requestMatchers(
+                        new AntPathRequestMatcher("/admin/**")
+                ).hasRole("admin")
                 .anyRequest().authenticated()
                 );
 
@@ -81,7 +97,7 @@ public class WebSecurityConfig {
                 .loginProcessingUrl("/userlogin.do")
                 .usernameParameter("username")
                 .passwordParameter("userpw")
-                .failureUrl("/loginFail")
+                .failureHandler(loginFailHandler)
                 .defaultSuccessUrl("/home")
                 .permitAll()
                 );
@@ -102,4 +118,7 @@ public class WebSecurityConfig {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
+
+
+
 }

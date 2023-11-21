@@ -9,6 +9,7 @@
         <div sec:authorize="isAuthenticated()" style="position: absolute; left: 65%; border: 2px solid white; border-radius: 15px; padding: 7px;">
             <h6 class="nav-link" style="font-size: 0.8rem;">사랑하고 축복합니다 <span th:text="${username}"></span> 님!</h6>
             <div style="display: flex">
+                <a class="nav-link" target="_blank" th:href="@{admin}" sec:authorize="hasRole('ROLE_admin')" style=" font-size: 0.8rem;">관리자페이지 &nbsp;&nbsp;&nbsp;</a>
                 <a class="nav-link" th:href="@{ministry}" sec:authorize="hasRole('ROLE_leader')" style=" font-size: 0.8rem;">임원게시판 &nbsp;&nbsp;&nbsp;</a>
                 <a class="nav-link" th:href="@{mypage}" style=" font-size: 0.8rem;">마이페이지</a>
                 &nbsp;&nbsp;&nbsp;

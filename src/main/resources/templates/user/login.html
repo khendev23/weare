@@ -21,6 +21,7 @@
                 <h1>우리는 로그인</h1>
             </div>
         </div>
+        <br>
         <div style="display: flex; justify-content: center;">
             <div>
                 <form th:action="@{/userlogin.do}" method="post">
@@ -32,8 +33,13 @@
                         <label for="userpw">아이디</label>
                         <input type="password" id="userpw" name="userpw" placeholder="비밀번호">
                     </p>
-                    <button type="submit">로그인</button>
+                    <div th:if="${error=='true'}">
+                        <p id="valid" style="color: red; font-size:13px;" th:text="${exception}"></p>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">로그인</button>
                 </form>
+
             </div>
         </div>
     </section>
