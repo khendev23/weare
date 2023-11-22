@@ -1809,3 +1809,14 @@ p {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+.noticeTable {
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.noticeTable:hover {
+  background-color: white;
+  box-shadow: 2px 2px 2px 0 grey;
+}

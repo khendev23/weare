@@ -4,6 +4,7 @@ import com.ep.weare.user.entity.Gender;
 import com.ep.weare.user.entity.UserCheck;
 import com.ep.weare.user.entity.UserEntity;
 import com.ep.weare.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -39,21 +40,8 @@ public class UserController {
     // 메인 화면 뷰단 연결
     // ModelAndView를 쓰는 이유는 RESTFUL 사용을 위한 @RestController로 인해서임. (@Controller 사용시, String으로 연결 가능)
     @GetMapping("/home")
-    public String getHome(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-
-        Optional<UserEntity> userEntityOptional = userService.findById(username);
-
-        if (userEntityOptional.isPresent()) {
-            UserEntity userEntity = userEntityOptional.get();
-
-            log.info("userCheck : {}", userEntity.getUserCheck());
-
-            model.addAttribute("userCheck", userEntity.getUserCheck());
-        }
-
-        model.addAttribute("username", username);
+    public String getHome(Model model, HttpSession session) {
+        updateModelWithUserInfo(model, session);
         return "home";
     }
 
@@ -103,14 +91,14 @@ public class UserController {
         return "home";
     };
 
-    // 회원가입 완료 뷰단 연결
-    @GetMapping("/signupComplete")
-    public String getSignUpComplete(Model model) {
-        return "user/signupComplete";
-    }
+//    // 회원가입 완료 뷰단 연결
+//    @GetMapping("/signupComplete")
+//    public String getSignUpComplete(Model model) {
+//        return "user/signupComplete";
+//    }
 
     // 회원가입 완료
-    @PostMapping("/signup/userCreate.do")
+    @PostMapping("/userCreate.do")
     public String createUser(@ModelAttribute("userEntity") UserEntity userEntity, BindingResult bindingResult,
                                @RequestParam("gender") String gender, @RequestParam("roadAddress") String roadAddress,
                                @RequestParam("detailAddress") String detailAddress, RedirectAttributes redirectAttr) {
@@ -141,8 +129,6 @@ public class UserController {
 
         userEntity.setUserCheck(UserCheck.x);
 
-        log.info(userEntity.toString());
-
         // DB 저장
         UserEntity response = userService.createUser(userEntity);
 
@@ -160,6 +146,23 @@ public class UserController {
 
     }
 
+    public void updateModelWithUserInfo(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        Optional<UserEntity> userEntityOptional = userService.findById(username);
+
+        if (userEntityOptional.isPresent()) {
+            UserEntity userEntity = userEntityOptional.get();
+
+
+            model.addAttribute("userCheck", userEntity.getUserCheck());
+
+            session.setAttribute("loggedInUser", userEntity);
+
+        }
+
+    }
 
 
 }

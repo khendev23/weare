@@ -30,6 +30,8 @@ public class UserEntity {
     private String address;
     private String rankName;
     private String teamName;
+
+    @Column(name = "msteamName")
     private String msTeamName;
 
     @Enumerated(EnumType.STRING)

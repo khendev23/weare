@@ -109,9 +109,10 @@
                 <th scope="col">#</th>
                 <th scope="col">ID</th>
                 <th scope="col">이름</th>
+                <th scope="col">직급</th>
                 <th scope="col">조</th>
                 <th scope="col">사역팀</th>
-                <th scope="col">생일</th>
+                <th scope="col">생일(나이)</th>
                 <th scope="col">휴대폰</th>
                 <th scope="col">주소</th>
               </tr>
@@ -121,9 +122,10 @@
                 <th scope="row" th:text="${userStat.index + 1}"></th>
                 <td th:text="${user.userId}"></td>
                 <td th:text="${user.userName}"></td>
+                <td th:text="${user.rankName != null ? user.rankName : ''}"></td>
                 <td th:text="${user.teamName}"></td>
                 <td th:text="${user.msTeamName}"></td>
-                <td th:text="${user.birthday}"></td>
+                <td th:text="${user.birthday} + ' (' + (${#temporals.year(T(java.time.LocalDate).now()) - #temporals.year(user.birthday) + 1}) + '세)'"></td>
                 <td th:text="${user.phone}"></td>
                 <td th:text="${user.address}"></td>
               </tr>

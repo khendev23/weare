@@ -78,7 +78,7 @@ public class WebSecurityConfig {
                         new AntPathRequestMatcher("/img/**"),
                         new AntPathRequestMatcher("/home"),
                         new AntPathRequestMatcher("/signup/**"),
-                        new AntPathRequestMatcher("/signupComplete"),
+                        new AntPathRequestMatcher("/userCreate.do"),
                         new AntPathRequestMatcher("/login")
                 ).permitAll()
                 .requestMatchers(
@@ -108,6 +108,11 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/home")
                 .permitAll()
                 );
+
+        http
+                .sessionManagement((sessionManagement) ->
+                sessionManagement.invalidSessionUrl("/home")
+        );
 
         http.csrf(AbstractHttpConfigurer::disable);
 

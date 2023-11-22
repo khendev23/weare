@@ -8,9 +8,84 @@
   <title>공지사항</title>
 </head>
 <div layout:fragment="content">
-  <div style="width: 100%; height: 97px; background-color:#2c3e50;"></div>
-  <section>
-
+  <div style="width: 100%; height: 90px; background-color:#2c3e50;"></div>
+  <section style="height: fit-content;">
+    <br><br><br>
+    <div style="display: flex; justify-content: center;">
+      <h3>공지사항</h3>
+    </div>
+    <br><br>
+    <div style="max-width: 1160px; display: flex; justify-content: end; margin: auto; padding-right: 50px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+      </svg>
+      &nbsp;&nbsp;&nbsp;
+      <div sec:authorize="hasAnyRole('ROLE_admin', 'ROLE_leader')" style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 60px; display: flex; justify-content: center; background-color: white;">
+        <a th:href="@{announceCreate.do}">글쓰기</a>
+      </div>
+    </div>
+    <br>
+    <div style="background-color: #f6f6f6;">
+      <br>
+      <div style="display: flex; flex-wrap:wrap; justify-content: center; max-width: 1160px; margin: auto;">
+        <div class="noticeTable" th:each="important, userStat : ${importantNotice}">
+          <table style="margin-left: 100px; padding-left: 20px;">
+            <tr>
+              <td style="width: 40px;">
+                📣
+              </td>
+              <td style="width: 100px;">
+                <div style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 60px; display: flex; justify-content: center; background-color: black; color: white;">
+                  공지
+                </div>
+              </td>
+              <td style="width: 700px; font-size: 15px; font-weight: 600;">
+                <a th:href="@{announceDetail.do(id=${important.announceId})}" th:text="${important.title}"></a>
+              </td>
+              <td style="width: 200px; font-size: 13px;" th:text="${important.announceCreatedAt}"></td>
+              <td style="width: 100px; padding-right: 20px;">
+                <a th:href="@{announceDetail.do(id=${important.announceId})}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                  </svg>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="noticeTable" th:each="list, userStat : ${list}">
+          <table style="margin-left: 100px; padding-left: 20px;">
+            <tr>
+              <td style="width: 40px;" th:text = "${((nowPage - 1) * 10) + userStat.count}"></td>
+              <td style="width: 100px;">
+                <div style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 60px; display: flex; justify-content: center; background-color: white;">
+                  공지
+                </div>
+              </td>
+              <td style="width: 700px; font-size: 15px; font-weight: 600;">
+                <a th:href="@{announceDetail.do(id=${list.announceId})}" th:text="${list.title}"></a>
+              </td>
+              <td style="width: 200px; font-size: 13px;" th:text="${list.announceCreatedAt}"></td>
+              <td style="width: 100px; padding-right: 20px;">
+                <a th:href="@{announceDetail.do(id=${list.announceId})}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                  </svg>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <br>
+      <div style="display: flex; justify-content: center;">
+        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <a style="width: 30px; font-size: 1.2rem;" th:if="${page != nowPage}" th:href="@{announcement(page = ${page - 1})}" th:text="${page}"></a>
+          <strong  th:if="${page == nowPage}" th:text="${page}" style="color : red; width: 30px; font-size: 1.2rem;"></strong>
+        </th:block>
+      </div>
+      <br>
+    </div>
   </section>
 </div>
 </html>

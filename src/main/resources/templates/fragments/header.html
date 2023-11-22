@@ -5,9 +5,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <div th:fragment="header">
-    <nav id="scrollspy" class="navbar navbar-light bg-light navbar-expand-lg fixed-top" data-spy="affix" data-offset-top="20">
-        <div sec:authorize="isAuthenticated()" style="position: absolute; left: 65%; border: 2px solid white; border-radius: 15px; padding: 7px;">
-            <h6 class="nav-link" style="font-size: 0.8rem;">사랑하고 축복합니다 <span th:text="${username}"></span> 님!</h6>
+    <nav  id="scrollspy" class="navbar navbar-light bg-light navbar-expand-lg fixed-top" data-spy="affix" data-offset-top="20">
+        <div sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}" style="position: absolute; left: 65%; border: 2px solid white; border-radius: 15px; padding: 7px;">
+            <h6 class="nav-link" style="font-size: 0.8rem;">사랑하고 축복합니다 <span th:text="${loggedInUser.userName}"></span>님!</h6>
             <div style="display: flex">
                 <a class="nav-link" target="_blank" th:href="@{admin}" sec:authorize="hasRole('ROLE_admin')" style=" font-size: 0.8rem;">관리자페이지 &nbsp;&nbsp;&nbsp;</a>
                 <a class="nav-link" th:href="@{ministry}" sec:authorize="hasRole('ROLE_leader')" style=" font-size: 0.8rem;">임원게시판 &nbsp;&nbsp;&nbsp;</a>
@@ -18,12 +18,12 @@
                 </form>
             </div>
         </div>
-        <div class="container">
+        <div class="container" >
             <a class="navbar-brand" th:href="@{home}">
-                <img th:src="@{assets/img/weare/eplogo.png}" style="width: 200px;" alt="" class="brand-img">
+                <img th:src="@{/assets/img/weare/eplogo.png}" style="width: 200px;" alt="" class="brand-img">
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav" sec:authorize="isAnonymous()" style="margin-left: 40%;">
+                <ul class="navbar-nav" sec:authorize="isAnonymous()" style="margin-left: 55%;">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{signup}" style="font-size: 1.3rem;">회원가입</a>
                     </li>
@@ -31,41 +31,44 @@
                         <a class="nav-link" th:href="@{login}" style="font-size: 1.3rem;">로그인</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav" th:if="${userCheck == T(com.ep.weare.user.entity.UserCheck).o}" sec:authorize="isAuthenticated()" style="margin-left: 10%;">
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <div class="dropdown">
-                            <button class="dropbtn" style="border-style: none; background: transparent;">
-                                <span style="font-size: 1.3rem;" class="nav-link">우리는</span>
-                            </button>
-                            <div class="dropdown-content">
-                                <a class="nav-link" th:href="@{weareintro}" style="color: black;">우리는 소개</a>
-                                <a class="nav-link" th:href="@{ministryintro.html}" style="color: black;">우리는 사역소개</a>
-                                <hr>
-                                <a class="nav-link" th:href="@{2023weare}" target="_blank" style="color: black;">2023 우리는</a>
+                <th:block sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}">
+                    <ul class="navbar-nav"  th:if="${loggedInUser.userCheck == T(com.ep.weare.user.entity.UserCheck).o}" style="margin-left: 10%;">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="dropbtn" style="border-style: none; background: transparent;">
+                                    <span style="font-size: 1.3rem;" class="nav-link">우리는</span>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a class="nav-link" th:href="@{weareintro}" style="color: black;">우리는 소개</a>
+                                    <a class="nav-link" th:href="@{ministryintro.html}" style="color: black;">우리는 사역소개</a>
+                                    <hr>
+                                    <a class="nav-link" th:href="@{2023weare}" target="_blank" style="color: black;">2023 우리는</a>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" th:href="@{announcement}">공지사항</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">자유게시판</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">예배</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">질문</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" th:href="@{ministry}">사역</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav" th:if="${userCheck == T(com.ep.weare.user.entity.UserCheck).x}" sec:authorize="isAuthenticated()" style="margin-left: 10%;">
-                    <li class="nav-item">
-                        <a style="font-size: 1.3rem;" class="nav-link" href="#">승인이 필요한 계정입니다. 유성근 청년에게 문의 해주세요.</a>
-                    </li>
-                </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{announcement}">공지사항</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">자유게시판</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">예배</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">질문</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{ministry}">사역</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav" th:if="${loggedInUser.userCheck == T(com.ep.weare.user.entity.UserCheck).x}" style="margin-left: 10%;">
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" href="#">승인이 필요한 계정입니다. 유성근 청년에게 문의 해주세요.</a>
+                        </li>
+                    </ul>
+                </th:block>
             </div>
         </div>
     </nav>
