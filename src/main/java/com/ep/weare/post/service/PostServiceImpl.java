@@ -32,8 +32,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Announcement> findByImportant(char important) {
-        return postRepository.findByImportant(important);
+    public List<Announcement> findByImportantOrderByAnnounceIdDesc(char important) {
+        return postRepository.findByImportantOrderByAnnounceIdDesc(important);
     }
 
     @Override
@@ -44,6 +44,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public Announcement saveAnnounce(Announcement announcement) {
         return postRepository.save(announcement);
+    }
+
+    @Override
+    public void deleteAnnounceById(int announceId) {
+        postRepository.deleteById((long) announceId);
+    }
+
+    @Override
+    public Page<Announcement> findByKeywordWithPaging(String keyword, Pageable pageable) {
+        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+    }
+
+    @Override
+    public List<Announcement> findTop3ByOrderByAnnounceIdDesc() {
+        return postRepository.findTop3ByOrderByAnnounceIdDesc();
     }
 
 

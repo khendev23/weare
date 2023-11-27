@@ -15,12 +15,17 @@
       <h3>공지사항</h3>
     </div>
     <br><br>
-    <div style="max-width: 1160px; display: flex; justify-content: end; margin: auto; padding-right: 50px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-      </svg>
+    <div style="max-width: 1160px; display: flex; justify-content: end; align-items: center; margin: auto; padding-right: 50px;">
+      <form method="get" th:action="@{/announcement}">
+        <input type="text" name="search" placeholder="검색어 입력">
+        <button type="submit" style="border-style: none; background-color: white;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+        </button>
+      </form>
       &nbsp;&nbsp;&nbsp;
-      <div sec:authorize="hasAnyRole('ROLE_admin', 'ROLE_leader')" style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 60px; display: flex; justify-content: center; background-color: white;">
+      <div sec:authorize="hasAnyRole('ROLE_admin', 'ROLE_leader')" style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 60px; height: fit-content; display: flex; justify-content: center; background-color: white;">
         <a th:href="@{announceCreate.do}">글쓰기</a>
       </div>
     </div>

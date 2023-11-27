@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WeAre 마이페이지</title>
+    <link rel="stylesheet" th:href="@{assets/css/admin.styles.min.css}"/>
+</head>
+
+<body>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div>
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+                <a href="#" class="text-nowrap logo-img" style="padding-top: 3%;">
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <img th:src="@{assets/img/logo/eplogo_black.png}" width="90" alt="" />&nbsp;
+                        <span style="font-size: 2rem; font-weight: 800; color: black;">WeAre</span>
+                    </div>
+                </a>
+                <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                    <i class="ti ti-x fs-8"></i>
+                </div>
+            </div>
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                <ul id="sidebarnav">
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Home</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" th:href="@{mypage}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                            <span class="hide-menu">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <!--  Header End -->
+        <div class="container-fluid" style="width: 100%; max-width: 1600px;">
+            <div class="card w-100">
+                <div class="card-header">
+                    <span style="font-size: 1.5rem; font-weight: 800;">My Information</span>
+                </div>
+                <div class="card-body">
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">아이디</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.userId}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">비밀번호</span>
+                        <input style="font-size: 1.3rem; border-style: none;" type="password" th:value="${myAccount.userPw}">
+                        <button class="btn btn-dark-light" style="margin-left: 40px;">수정하기</button>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">이름</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.userName}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">생일</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.birthday}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">이메일</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.email}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">주소</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.address}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">조</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.teamName}"></span>
+                    </div>
+                    <br>
+                    <div class="d-sm-flex d-block align-items-center" style="padding-left: 50px;">
+                        <span style="width: 130px; font-size: 1.3rem; font-weight: 700;">사역팀</span>
+                        <span style="font-size: 1.3rem;" th:text="${myAccount.msTeamName}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script th:src="@{assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{assets/js/sidebarmenu.js}"></script>
+<script th:src="@{assets/js/app.min.js}"></script>
+<!-- <script src="../assets/js/dashboard.js"></script> -->
+</body>
+
+</html>

@@ -13,9 +13,15 @@ public interface PostService {
 
     Optional<Announcement> findAnnounceById(int id);
 
-    List<Announcement> findByImportant(char important);
+    List<Announcement> findByImportantOrderByAnnounceIdDesc(char important);
 
     Page<Announcement> findAll(Pageable pageable);
 
     Announcement saveAnnounce(Announcement announcement);
+
+    void deleteAnnounceById(int announceId);
+
+    Page<Announcement> findByKeywordWithPaging(String keyword, Pageable pageable);
+
+    List<Announcement> findTop3ByOrderByAnnounceIdDesc();
 }

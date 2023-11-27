@@ -36,19 +36,16 @@
             <h3 style="font-size: 30px; font-weight: 800;">공지사항</h3>
             <br>
             <div style="display: flex;">
-                <div style="border: 1px solid black; width: 400px; height: 200px; padding: 30px 0 10px 30px;">
-                    <p style="font-size: 22px; font-weight: 700;">12월 2일 리더 수련회</p>
-                    <br><br>
-                    <p>지민규 총무</p>
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div style="border: 1px solid black; width: 400px; height: 200px;">
-                    dkdk
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <div style="border: 1px solid black; width: 400px; height: 200px;">
-                    dkdk
-                </div>
+                <th:block th:each="announce : ${top3Announcement}">
+                    <a th:href="@{announceDetail.do(id=${announce.announceId})}">
+                        <div style="border: 1px solid black; width: 400px; height: 200px; padding: 30px 0 10px 30px;">
+                             <p style="font-size: 22px; font-weight: 700;" th:text="${announce.title}"></p>
+                            <br><br>
+                            <p th:text="${announce.userId}"></p>
+                        </div>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </th:block>
             </div>
         </div>
     </section>
@@ -56,13 +53,17 @@
     <section style="background-color: lightgray;">
         <div style="padding: 150px 15% 170px 15%;">
             <div style="display: flex; justify-content: center;">
+                <div style="text-align: center; padding-top: 12px;">
+                    <h3 style="font-size: 20px; font-weight: 700;">지난 말씀 켈리</h3>
+                    <img th:src="@{/assets/img/weare/kelly2.jpg}" alt="" style="width: 80%;">
+                </div>
                 <div style="text-align: center">
                     <h3 style="font-size: 30px; font-weight: 800;">이번 주 말씀 켈리</h3>
-                    <img th:src="@{/assets/img/weare/kelly2.jpg}" alt="" style="width: 60%;">
+                    <img th:src="@{/assets/img/weare/kelly3.jpg}" alt="" style="width: 100%;">
                 </div>
-                <div style="text-align: center; ">
-                    <h3 style="font-size: 30px; font-weight: 800;">지난 주 말씀 켈리</h3>
-                    <img th:src="@{/assets/img/weare/kelly.jpg}" alt="" style="width: 60%;">
+                <div style="text-align: center; padding-top: 12px;">
+                    <h3 style="font-size: 20px; font-weight: 700;">지난 말씀 켈리</h3>
+                    <img th:src="@{/assets/img/weare/kelly.jpg}" alt="" style="width: 80%;">
                 </div>
             </div>
         </div>
@@ -79,7 +80,7 @@
             <div id="owl-testmonial" class="owl-carousel owl-theme mt-4">
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/yena.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img th:src="@{/assets/img/people/yena.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">예나 지금이나 예수님의 사랑을 나누는 한예나 입니다.</p>

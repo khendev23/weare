@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,8 @@ public class PostController {
     // 공지사항 홈페이지
     @GetMapping("/announcement")
     public String getAnnouncement (Model model, HttpSession session,
-                                   @PageableDefault(page = 0, size = 10, sort = "announceId", direction = Sort.Direction.DESC) Pageable pageable) {
+                                   @PageableDefault(page = 0, size = 10, sort = "announceId", direction = Sort.Direction.DESC) Pageable pageable,
+                                   @RequestParam(name = "search", required = false) String search) {
 
         userController.updateModelWithUserInfo(model, session);
 
@@ -51,15 +53,24 @@ public class PostController {
 
         char important = 'o';
 
-        List<Announcement> importantAnnouncement = postService.findByImportant(important);
+        List<Announcement> importantAnnouncement = postService.findByImportantOrderByAnnounceIdDesc(important);
 
         log.info("important : {}", importantAnnouncement);
 
         model.addAttribute("noticeList", announcement);
         model.addAttribute("importantNotice", importantAnnouncement);
 
-        // 페이징 처리
-        Page<Announcement> list = postService.findAll(pageable);
+        // 검색어, 페이징 처리
+        Page<Announcement> list;
+
+        if (search != null && !search.isEmpty()) {
+            // 검색어가 있는 경우 검색 결과 및 페이징 처리 가져오기
+            list = postService.findByKeywordWithPaging(search, pageable);
+        } else {
+            // 검색어가 없는 경우 전체 공지사항 및 페이징 처리 가져오기
+            list = postService.findAll(pageable);
+        }
+
 
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
@@ -120,5 +131,49 @@ public class PostController {
         }
 
         return "redirect:/announcement";
+    }
+
+    // 수정 클릭 시
+    @GetMapping("/announceUpdate")
+    public String getAnnounceUpdatePage(Model model, HttpSession session,
+                                        @RequestParam("id") int id) {
+        userController.updateModelWithUserInfo(model, session);
+        model.addAttribute("Announcement", new Announcement());
+
+        Optional<Announcement> announcementOptional = postService.findAnnounceById(id);
+
+        log.info("id : {}", id);
+
+        if (announcementOptional.isPresent()) {
+            Announcement announcementDetail = announcementOptional.get();
+            model.addAttribute("announcementDetail", announcementDetail);
+            log.info("announcementDetail : {}", announcementDetail);
+        }
+
+        return "post/announceUpdate";
+    }
+
+    // 수정 완료 클릭 시
+    @PostMapping("announceUpdateComplete.do")
+    public String announceUpdateComplete (Model model, HttpSession session,
+                                          @RequestParam("announceId") int announceId,
+                                          @RequestParam("title") String title,
+                                          @RequestParam("content") String content,
+                                          @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck) {
+        userController.updateModelWithUserInfo(model, session);
+
+        Optional<Announcement> announcementOptional = postService.findAnnounceById(announceId);
+
+        if (announcementOptional.isPresent()) {
+            Announcement announcement = announcementOptional.get();
+
+            announcement.setTitle(title);
+            announcement.setContent(content);
+            announcement.setImportant(importantCheck.charAt(0));
+
+            postService.saveAnnounce(announcement);
+        }
+
+        return "redirect:/announceDetail.do?id=" + announceId;
     }
 }

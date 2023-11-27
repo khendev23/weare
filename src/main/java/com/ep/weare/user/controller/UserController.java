@@ -1,5 +1,7 @@
 package com.ep.weare.user.controller;
 
+import com.ep.weare.post.entity.Announcement;
+import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.entity.Gender;
 import com.ep.weare.user.entity.UserCheck;
 import com.ep.weare.user.entity.UserEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -30,11 +33,14 @@ public class UserController {
 
     private PasswordEncoder passwordEncoder;
 
+    private PostService postService;
+
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, PostService postService) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.postService = postService;
     }
 
     // 메인 화면 뷰단 연결
@@ -42,6 +48,11 @@ public class UserController {
     @GetMapping("/home")
     public String getHome(Model model, HttpSession session) {
         updateModelWithUserInfo(model, session);
+
+        List<Announcement> announcement = postService.findTop3ByOrderByAnnounceIdDesc();
+
+        model.addAttribute("top3Announcement", announcement);
+
         return "home";
     }
 
@@ -144,6 +155,23 @@ public class UserController {
 //        rv.setExposeModelAttributes(false);
 //        return new ModelAndView(rv);
 
+    }
+
+    // 마이페이지 접속
+    @GetMapping("/mypage")
+    public String getMyPage(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        Optional<UserEntity> userEntityOptional = userService.findById(username);
+
+        if (userEntityOptional.isPresent()) {
+            UserEntity userEntity = userEntityOptional.get();
+
+            model.addAttribute("myAccount", userEntity);
+        }
+
+        return "user/mypage";
     }
 
     public void updateModelWithUserInfo(Model model, HttpSession session) {
