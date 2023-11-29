@@ -23,4 +23,6 @@ public interface PostRepository extends JpaRepository<Announcement, Long> {
     Page<Announcement> findByTitleContainingOrContentContaining(String keyword, String keyword1, Pageable pageable);
 
     List<Announcement> findTop3ByOrderByAnnounceIdDesc();
+
+    Optional<Announcement> findFirstByOrderByAnnounceIdDesc();
 }

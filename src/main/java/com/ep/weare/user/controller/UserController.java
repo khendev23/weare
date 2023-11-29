@@ -1,11 +1,14 @@
 package com.ep.weare.user.controller;
 
+import com.ep.weare.admin.entity.Kelly;
+import com.ep.weare.admin.service.AdminService;
 import com.ep.weare.post.entity.Announcement;
-import com.ep.weare.post.service.PostService;
+import com.ep.weare.post.service.AnnounceService;
 import com.ep.weare.user.entity.Gender;
 import com.ep.weare.user.entity.UserCheck;
 import com.ep.weare.user.entity.UserEntity;
 import com.ep.weare.user.service.UserService;
+import com.google.common.collect.Lists;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,14 +34,18 @@ public class UserController {
 
     private PasswordEncoder passwordEncoder;
 
-    private PostService postService;
+    private AnnounceService postService;
+
+    private AdminService adminService;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, PostService postService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnounceService postService,
+                          AdminService adminService) {
 
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.postService = postService;
+        this.adminService = adminService;
     }
 
     // 메인 화면 뷰단 연결
@@ -52,6 +57,25 @@ public class UserController {
         List<Announcement> announcement = postService.findTop3ByOrderByAnnounceIdDesc();
 
         model.addAttribute("top3Announcement", announcement);
+
+        List<Kelly> getTop3Kellys = adminService.findTop3ByOrderByKellyIdDesc();
+        Kelly kellyTop1 = null;
+        Kelly kellyTop2 = null;
+        Kelly kellyTop3 = null;
+
+        if (!getTop3Kellys.isEmpty()) {
+            kellyTop1 = getTop3Kellys.get(0);
+            if (getTop3Kellys.size() > 1) {
+                kellyTop2 = getTop3Kellys.get(1);
+                if (getTop3Kellys.size() > 2) {
+                    kellyTop3 = getTop3Kellys.get(2);
+                }
+            }
+        }
+
+        model.addAttribute("kelly1", kellyTop1);
+        model.addAttribute("kelly2", kellyTop2);
+        model.addAttribute("kelly3", kellyTop3);
 
         return "home";
     }
@@ -192,5 +216,16 @@ public class UserController {
 
     }
 
+    @GetMapping("/kelly")
+    public String getKelly(Model model) {
+
+        List<Kelly> getAllKellys = adminService.findAllByOrderByKellyIdDesc();
+
+        List<List<Kelly>> chunkedKellys = Lists.partition(getAllKellys, 2);
+
+        model.addAttribute("kellys", chunkedKellys);
+
+        return "user/kelly";
+    }
 
 }

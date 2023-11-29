@@ -5,6 +5,7 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/default_layout}">
 <head>
+    <script th:src="@{assets/vendors/jquery/jquery-3.4.1.js}"></script>
     <title>공지사항</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
@@ -16,17 +17,18 @@
             <h3>공지사항</h3>
         </div>
         <br><br>
-        <div sec:authorize="hasRole('ROLE_admin')" style="max-width: 1160px; display: flex; justify-content: end; margin: auto; padding-right: 50px;">
-
-            <button type="button" id="patchNoticeBtn" style="border-style: none; font-size: 12px;">
-                <a th:href="@{announceUpdate(id=${announcementDetail.announceId})}">수정</a>
-            </button>
-            &nbsp;|&nbsp;
-            <form action="">
-                <input type="hidden" id="deleteNoticeInput" th:value="${announcementDetail.announceId}">
-                <button type="button" id="deleteNoticeBtn" style="border-style: none; font-size: 12px;">삭제</button>
-            </form>
-        </div>
+        <th:block th:with="loggedInUser=${session.loggedInUser}">
+            <div th:if="${loggedInUser.userId == announcementDetail.userId}" style="max-width: 1160px; display: flex; justify-content: end; margin: auto; padding-right: 50px;">
+                <button type="button" id="patchNoticeBtn" style="border-style: none; font-size: 12px;">
+                    <a th:href="@{announceUpdate(id=${announcementDetail.announceId})}">수정</a>
+                </button>
+                &nbsp;|&nbsp;
+                <form action="">
+                    <input type="hidden" id="deleteNoticeInput" th:value="${announcementDetail.announceId}">
+                    <button type="button" id="deleteNoticeBtn" style="border-style: none; font-size: 12px; height: 24px;">삭제</button>
+                </form>
+            </div>
+        </th:block>
         <div style="max-width: 1060px; margin: auto;">
             <hr>
             <div style="display: flex; justify-content: center; padding: 15px 0 15px 0;">
@@ -38,14 +40,24 @@
                 <div style="width: 700px;">
                     <span style="font-size: 18px; font-weight: 600;" th:text="${announcementDetail.title}"></span>
                 </div>
-                <th:block th:with="loggedInUser=${session.loggedInUser}">
-                    <div style="width: 150px;">
-                        <span style="font-size: 13px;" th:text="${loggedInUser.userName}"></span>
-                    </div>
-                </th:block>
+                <div style="width: 150px;">
+                    <span style="font-size: 13px;" th:text="${announcementDetail.userId}"></span>
+                </div>
                 <div>
                     <span style="font-size: 13px;" th:text="${announcementDetail.announceCreatedAt}"></span>
                 </div>
+            </div>
+            <hr>
+            <div>
+                <p style="padding-left: 30px; font-weight: 600;">첨부파일</p>
+                <div style="padding-left: 30px; line-height:2;">
+                    <th:block th:each="attach : ${attaches}">
+                        <a th:href="@{'/announceAttach/' + ${attach.announceRenamedFilename}}" th:attr="download=${attach.announceOriginalFilename}" style="padding-top: 10px; padding-bottom: 10px;" th:text="${attach.announceOriginalFilename}"></a>
+                        <br>
+                    </th:block>
+                </div>
+
+
             </div>
             <hr>
             <div style="padding:30px; min-height: 600px;">

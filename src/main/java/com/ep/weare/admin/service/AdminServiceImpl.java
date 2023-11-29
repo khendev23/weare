@@ -1,6 +1,8 @@
 package com.ep.weare.admin.service;
 
+import com.ep.weare.admin.entity.Kelly;
 import com.ep.weare.admin.repository.AdminRepository;
+import com.ep.weare.admin.repository.KellyRepository;
 import com.ep.weare.user.entity.UserCheck;
 import com.ep.weare.user.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private AdminRepository adminRepository;
+    private KellyRepository kellyRepository;
 
-    public AdminServiceImpl(AdminRepository adminRepository) {
+    public AdminServiceImpl(AdminRepository adminRepository, KellyRepository kellyRepository) {
         this.adminRepository = adminRepository;
+        this.kellyRepository = kellyRepository;
     }
 
     @Override
@@ -37,4 +41,26 @@ public class AdminServiceImpl implements AdminService {
     public List<UserEntity> findByUserCheck(UserCheck userCheck) {
         return adminRepository.findByUserCheck(userCheck);
     }
+
+    @Override
+    public void insertKelly(Kelly attach) {
+        kellyRepository.save(attach);
+    }
+
+    @Override
+    public Optional<Kelly> findFirstByOrderByKellyIdDesc() {
+        return kellyRepository.findFirstByOrderByKellyIdDesc();
+    }
+
+    @Override
+    public List<Kelly> findTop3ByOrderByKellyIdDesc() {
+        return kellyRepository.findTop3ByOrderByKellyIdDesc();
+    }
+
+    @Override
+    public List<Kelly> findAllByOrderByKellyIdDesc() {
+        return kellyRepository.findAllByOrderByKellyIdDesc();
+    }
+
+
 }

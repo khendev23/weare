@@ -1,15 +1,10 @@
 package com.ep.weare.post.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +21,9 @@ public class Announcement {
     private LocalDate announceCreatedAt;
     private String userId;
     private char important;
+
+    @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL)
+    private List<AnnouncementAttach> attaches;
 
     @PrePersist
     protected void onCreate() {

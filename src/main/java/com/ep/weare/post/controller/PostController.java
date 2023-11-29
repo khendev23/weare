@@ -1,26 +1,30 @@
 package com.ep.weare.post.controller;
 
-import com.ep.weare.post.dto.AnnounceWithUser;
-import com.ep.weare.post.dto.AnnounceWithUserInterface;
+import com.ep.weare.common.Utils;
 import com.ep.weare.post.entity.Announcement;
-import com.ep.weare.post.service.PostService;
+import com.ep.weare.post.entity.AnnouncementAttach;
+import com.ep.weare.post.service.AnnounceService;
 import com.ep.weare.user.controller.UserController;
 import com.ep.weare.user.entity.UserEntity;
 import com.ep.weare.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,18 +32,22 @@ import java.util.Optional;
 @Slf4j
 public class PostController {
 
-    private PostService postService;
+    private AnnounceService postService;
     private UserService userService;
 
     private UserController userController;
 
     @Autowired
-    public PostController(PostService postService, UserService userService, UserController userController) {
+    public PostController(AnnounceService postService, UserService userService, UserController userController) {
 
         this.postService = postService;
         this.userService = userService;
         this.userController = userController;
     }
+
+    // 공지사항 파일 저장 디렉토리
+    @Value("${file.upload.directory.announceAttach:C:/weareAttach/announceAttach}")
+    String uploadDirectory;
 
     // 공지사항 홈페이지
     @GetMapping("/announcement")
@@ -95,7 +103,11 @@ public class PostController {
             Announcement announcementDetail = announcementOptional.get();
             model.addAttribute("announcementDetail", announcementDetail);
             log.info("announcementDetail : {}", announcementDetail);
+            List<AnnouncementAttach> attaches = postService.findById(announcementDetail.getAnnounceId());
+            log.info("attaches : {}", attaches);
+            model.addAttribute("attaches", attaches);
         }
+
 
         return "post/announceDetail";
     }
@@ -112,23 +124,63 @@ public class PostController {
     @PostMapping("/announceCreateComplete.do")
     public String saveAnnounce (Model model, HttpSession session,
                                 @ModelAttribute("Announcement") Announcement announcement,
-                                @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck) {
+                                @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck,
+                                @RequestParam(name = "announceFile") List<MultipartFile> files) throws IOException {
+
+        // 로그인 계정 정보 추출
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
-        Optional<UserEntity> userEntityOptional = userService.findById(username);
+        Optional<Announcement> announcementOptional = postService.findFirstByOrderByAnnounceIdDesc();
 
-        if (userEntityOptional.isPresent()) {
-            UserEntity userEntity = userEntityOptional.get();
-
-            announcement.setUserId(userEntity.getUserId());
-
-            announcement.setImportant(importantCheck.charAt(0));
-
-            log.info("announcement : {}", announcement);
-
-            Announcement response = postService.saveAnnounce(announcement);
+        if (announcementOptional.isPresent()) {
+            Announcement announcementById = announcementOptional.get();
+            announcement.setAnnounceId(announcementById.getAnnounceId() + 1);
+        } else {
+            announcement.setAnnounceId(1);
         }
+
+        announcement.setUserId(username);
+
+        announcement.setImportant(importantCheck.charAt(0));
+
+        log.info("announcement : {}", announcement);
+
+        // 첨부파일
+        List<AnnouncementAttach> attachments = new ArrayList<>();
+        if(files != null && !files.isEmpty()) {
+            for (int i = 0; i<files.size(); i++) {
+                MultipartFile file = files.get(i);
+                if(!file.isEmpty()) {
+                    String originalFilename = file.getOriginalFilename();
+                    String renamedFilename = Utils.getRenameFilename(originalFilename); // 20230807_142828888_123.jpg
+                    File destFile = new File(uploadDirectory, renamedFilename); // 부모디렉토리 생략가능. spring.servlet.multipart.location 값을 사용(기본값)
+                    file.transferTo(destFile);
+
+                    AnnouncementAttach attach = new AnnouncementAttach();
+
+                    Optional<AnnouncementAttach> attachOptional = postService.findFirstByOrderByAnnounceAttachmentIdDesc();
+
+                    if (attachOptional.isPresent()) {
+                        AnnouncementAttach announcementAttach = attachOptional.get();
+                        attach.setAnnounceAttachmentId(announcementAttach.getAnnounceAttachmentId() + i+1);
+                    } else {
+                        attach.setAnnounceAttachmentId(i+1);
+                    }
+
+                    attach.setAnnounceId(announcement.getAnnounceId());
+                    attach.setAnnounceOriginalFilename(originalFilename);
+                    attach.setAnnounceRenamedFilename(renamedFilename);
+
+                    attachments.add(attach);
+
+                }
+            }
+        }
+
+        announcement.setAttaches(attachments);
+
+        Announcement response = postService.saveAnnounce(announcement);
 
         return "redirect:/announcement";
     }
@@ -159,7 +211,8 @@ public class PostController {
                                           @RequestParam("announceId") int announceId,
                                           @RequestParam("title") String title,
                                           @RequestParam("content") String content,
-                                          @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck) {
+                                          @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck,
+                                          @RequestParam(name = "announceFile") List<MultipartFile> files) throws IOException {
         userController.updateModelWithUserInfo(model, session);
 
         Optional<Announcement> announcementOptional = postService.findAnnounceById(announceId);

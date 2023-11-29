@@ -23,9 +23,18 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+  mvc:
+    converters:
+      preferred-json-mapper: gson
 # logback
 logging:
   level:
     root: info
     '[com.ep.weare]': debug
+
+# file
+file:
+  upload:
+    directory:
+      kelly: C:/weareAttach/kelly
+      announceAttach: C:/weareAttach/announceAttach

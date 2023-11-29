@@ -29,13 +29,16 @@
     <br>
     <div class="container">
       <hr>
-      <form th:action="@{announceCreateComplete.do}" th:object="${Announcement}" method="post">
+      <form th:action="@{announceCreateComplete.do}" enctype="multipart/form-data" th:object="${Announcement}" method="post">
         <input type="text" th:field="*{title}" style="border: none; width: 600px; font-size: 1.5rem; font-weight: 600;" placeholder="제목을 입력하세요.">
         <hr>
         <label for="importantCheckbox">중요</label>
         <input type="checkbox" id="importantCheckbox" name="importantCheck" th:checked="${Announcement.important == 'o'}">
         <div style="margin-top: 10px;">
-          <textarea class="summernote" name="editordata" th:field="*{content}" ></textarea>
+          <input type="file" name="announceFile" multiple="multiple">
+        </div>
+        <div style="margin-top: 10px;">
+          <textarea id="summernote" name="editordata" th:field="*{content}"></textarea>
         </div>
         <div style="display: flex; justify-content: end">
           <button class="btn-primary" type="submit" style="margin-top: 15px; border-radius: 20px;">글쓰기</button>
@@ -45,7 +48,7 @@
     <br>
   </section>
   <script>
-    $('.summernote').summernote({
+    $('#summernote').summernote({
       // 에디터 높이
       height: 600,
       // 에디터 한글 설정
@@ -75,9 +78,44 @@
       // 추가한 글꼴
       fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
       // 추가한 폰트사이즈
-      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+      fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
 
+      callbacks : {
+        onImageUpload : function(files) {
+          for (var i = 0; i < files.length; i++) {
+            sendFile(files[i], this);
+          }
+        },
+        onPaste: function (e) {
+          var clipboardData = e.originalEvent.clipboardData;
+          if (clipboardData && clipboardData.items && clipboardData.items.length) {
+            var item = clipboardData.items[0];
+            if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+              e.preventDefault();
+            }
+          }
+        }
+      }
     });
+
+    function sendFile(file, el) {
+      const form_data = new FormData();
+      form_data.append('file', file);
+      $.ajax({
+        data : form_data,
+        type : "POST",
+        url : '/weare/uploadimage',
+        cache : false,
+        contentType : false,
+        processData : false,
+        success : function(data) {
+          $(el).summernote('insertImage', data.url);
+        }
+      });
+    }
+
+
+
 
     $(document).ready(function() {
       // 체크박스 변경 이벤트 처리

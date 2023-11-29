@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WeAreAdmin</title>
+    <link rel="stylesheet" th:href="@{assets/css/admin.styles.min.css}"/>
+</head>
+
+<body>
+<!--  Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div>
+            <div class="brand-logo d-flex align-items-center justify-content-between">
+                <a href="#" class="text-nowrap logo-img" style="padding-top: 3%;">
+                    <div style="display: flex; justify-content: center; align-items: center;">
+                        <img th:src="@{assets/img/logo/eplogo_black.png}" width="90" alt="" />&nbsp;
+                        <span style="font-size: 2rem; font-weight: 800; color: black;">WeAre</span>
+                    </div>
+                </a>
+                <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                    <i class="ti ti-x fs-8"></i>
+                </div>
+            </div>
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                <ul id="sidebarnav">
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">Home</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" th:href="@{admin}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-small-cap">
+                        <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        <span class="hide-menu">KELLY</span>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" th:href="@{kellyManage}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-layout-dashboard"></i>
+                            </span>
+                            <span class="hide-menu">Kelly관리</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+        <!--  Header Start -->
+        <!--  Header End -->
+        <div class="container-fluid" style="width: 100%; max-width: 1600px;">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kellyAdd" style="font-size: 1.3rem; font-weight: 700;">
+                켈리 추가하기
+            </button>
+            <br>
+            <!-- Modal -->
+            <div class="modal fade" id="kellyAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">켈리 추가하기</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{kellyCreate.do}" enctype="multipart/form-data" method="post">
+                            <div class="modal-body">
+                                <input type="file" name="kellyFile" multiple="multiple">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">추가하기</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                /* Flash 속성에서 메시지를 가져와서 alert로 표시 */
+                var flashMessage = /*[[${flashMessage}]]*/ '';
+                if (flashMessage) {
+                    alert(flashMessage);
+                }
+            </script>
+
+            <div class="card w-100" style="margin-top: 50px;">
+                <div class="card-header">
+                    <span style="font-size: 1.5rem; font-weight: 800;">켈리 목록</span>
+                </div>
+                <div class="card-body">
+<!--                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">-->
+                        <div class="row justify-content-center" style="width: 100%; margin-bottom: 20px;" th:each="chunk : ${kellys}">
+                            <div class="col-6 col-md-4 justify-content-center" th:each="kelly : ${chunk}" style="border: 1px solid black; border-radius: 30px; width: 33.3%; height: fit-content; margin-left: 30px; display: flex;">
+                                <img th:src="@{'/kelly/' + ${kelly.kellyRenamedFilename}}" alt="" style="width: 90%; padding: 3%;">
+                            </div>
+                        </div>
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script th:src="@{assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{assets/js/sidebarmenu.js}"></script>
+<script th:src="@{assets/js/app.min.js}"></script>
+<!-- <script src="../assets/js/dashboard.js"></script> -->
+</body>
+
+<script>
+    function approveUser(userId) {
+        // 사용자에게 확인을 받고 승인할지 여부 확인
+        var confirmApproval = confirm("사용자를 승인하시겠습니까?");
+
+        console.log(userId);
+
+        if (confirmApproval) {
+            // jQuery Ajax를 사용하여 서버로 userId를 전송
+            $.ajax({
+                type: "POST",
+                url: "/weare/admin/approveUser.do",
+                data: { userId: userId },
+                success: function(response) {
+                    // 서버 응답을 처리
+                    console.log(response);
+                    alert(response);
+                    // 여기에서 페이지 새로고침 또는 다른 동작 수행
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.error("Ajax 요청 실패:", error);
+                }
+            });
+        }
+    }
+</script>
+
+</html>
