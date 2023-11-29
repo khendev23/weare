@@ -2,13 +2,14 @@ package com.ep.weare.post.service;
 
 import com.ep.weare.post.entity.Announcement;
 import com.ep.weare.post.entity.AnnouncementAttach;
+import com.ep.weare.post.entity.Worship;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AnnounceService {
+public interface PostService {
     List<Announcement> findAllAnnouncement();
 
     Optional<Announcement> findAnnounceById(int id);
@@ -30,4 +31,16 @@ public interface AnnounceService {
     Optional<Announcement> findFirstByOrderByAnnounceIdDesc();
 
     List<AnnouncementAttach> findById(int announceId);
+
+    List<Worship> findAllWorship();
+
+    Page<Worship> findWorshipByKeywordWithPaging(String search, Pageable pageable);
+
+    Page<Worship> findWorshipAll(Pageable pageable);
+
+    Optional<Worship> findFirstByOrderByWorshipIdDesc();
+
+    void save(Worship worship);
+
+    Optional<Worship> findWorshipById(int id);
 }

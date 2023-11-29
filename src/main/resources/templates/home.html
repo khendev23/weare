@@ -7,6 +7,11 @@
 <head>
     <script th:src="@{assets/vendors/jquery/jquery-3.4.1.js}"></script>
     <title>WeAre</title>
+    <STYLE>
+        .announceBox:hover {
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+        }
+    </STYLE>
 </head>
 <div layout:fragment="content">
     <section id="home" class="header" th:style="'background-image: url(/weare/assets/img/header.jpg);'">
@@ -36,10 +41,10 @@
         <div style="padding: 150px 15% 220px 25%;">
             <h3 style="font-size: 30px; font-weight: 800;">공지사항</h3>
             <br>
-            <div style="display: flex;">
+            <div style="display: flex;" >
                 <th:block th:each="announce : ${top3Announcement}">
                     <a th:href="@{announceDetail.do(id=${announce.announceId})}">
-                        <div style="border: 1px solid black; width: 400px; height: 200px; padding: 30px 0 10px 30px;">
+                        <div class="announceBox" style="border: 1px solid black; width: 400px; height: 200px; padding: 30px 0 10px 30px;">
                              <p style="font-size: 22px; font-weight: 700;" th:text="${announce.title}"></p>
                             <br><br>
                             <p th:text="${announce.userId}"></p>
@@ -51,7 +56,7 @@
         </div>
     </section>
 
-    <section style="background-color: #f6f6f6;">
+    <section style="background-color: lightgrey;">
         <div style="padding : 30px 15% 0 15%">
             <div style="display: flex; justify-content: end;">
                 <a th:href="@{kelly}" style="border: 1px solid #3e74bf; background-color: #3e74bf; border-radius: 20px; color: white; padding: 5px; font-size: 1.3rem;">

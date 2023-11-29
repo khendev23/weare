@@ -1,6 +1,6 @@
 package com.ep.weare.post.controller;
 
-import com.ep.weare.post.service.AnnounceService;
+import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.controller.UserController;
 import com.ep.weare.user.service.UserService;
 import com.google.gson.JsonObject;
@@ -24,13 +24,13 @@ import java.util.UUID;
 @Slf4j
 public class PostRestController {
 
-    private AnnounceService postService;
+    private PostService postService;
     private UserService userService;
 
     private UserController userController;
 
     @Autowired
-    public PostRestController(AnnounceService postService, UserService userService, UserController userController) {
+    public PostRestController(PostService postService, UserService userService, UserController userController) {
 
         this.postService = postService;
         this.userService = userService;

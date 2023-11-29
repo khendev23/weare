@@ -3,7 +3,8 @@ package com.ep.weare.post.controller;
 import com.ep.weare.common.Utils;
 import com.ep.weare.post.entity.Announcement;
 import com.ep.weare.post.entity.AnnouncementAttach;
-import com.ep.weare.post.service.AnnounceService;
+import com.ep.weare.post.entity.Worship;
+import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.controller.UserController;
 import com.ep.weare.user.entity.UserEntity;
 import com.ep.weare.user.service.UserService;
@@ -24,21 +25,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @Slf4j
 public class PostController {
 
-    private AnnounceService postService;
+    private PostService postService;
     private UserService userService;
-
     private UserController userController;
 
     @Autowired
-    public PostController(AnnounceService postService, UserService userService, UserController userController) {
+    public PostController(PostService postService, UserService userService, UserController userController) {
 
         this.postService = postService;
         this.userService = userService;
@@ -229,4 +232,104 @@ public class PostController {
 
         return "redirect:/announceDetail.do?id=" + announceId;
     }
+
+    // 예배 게시판 접속
+    @GetMapping("/worship")
+    public String getWorshipPage (Model model, HttpSession session,
+                                  @PageableDefault(page = 0, size = 10, sort = "worshipDate", direction = Sort.Direction.DESC) Pageable pageable,
+                                  @RequestParam(name = "search", required = false) String search) {
+
+        model.addAttribute("worship", new Worship());
+
+        userController.updateModelWithUserInfo(model, session);
+
+        List<Worship> worships = postService.findAllWorship();
+
+        model.addAttribute("worshipList", worships);
+
+        // 검색어, 페이징 처리
+        Page<Worship> pageList;
+
+        if (search != null && !search.isEmpty()) {
+            // 검색어가 있는 경우 검색 결과 및 페이징 처리 가져오기
+            pageList = postService.findWorshipByKeywordWithPaging(search, pageable);
+        } else {
+            // 검색어가 없는 경우 전체 공지사항 및 페이징 처리 가져오기
+            pageList = postService.findWorshipAll(pageable);
+        }
+
+
+        int nowPage = pageList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, pageList.getTotalPages());
+
+        model.addAttribute("list", pageList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "post/worship";
+    }
+
+    // 예배 등록
+    @PostMapping("/worshipCreate.do")
+    public String getWorshipCreate (Model model, HttpSession session,
+                                    @ModelAttribute("Worship") Worship worship) {
+        // 로그인 계정 정보 추출
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        Optional<Worship> worshipOptional = postService.findFirstByOrderByWorshipIdDesc();
+
+        if (worshipOptional.isPresent()) {
+            Worship worshipById = worshipOptional.get();
+            worship.setWorshipId(worshipById.getWorshipId() + 1);
+        } else {
+            worship.setWorshipId(1);
+        }
+
+        worship.setUserId(username);
+
+        postService.save(worship);
+
+
+        return "redirect:/worship";
+    }
+
+    // 예배 상세
+    @GetMapping("/worshipDetail")
+    public String getWorshipDetail (Model model, HttpSession session, @RequestParam("id") int id) {
+        userController.updateModelWithUserInfo(model, session);
+
+        Optional<Worship> worshipOptional = postService.findWorshipById(id);
+
+        if (worshipOptional.isPresent()) {
+            Worship worshipDetail = worshipOptional.get();
+            model.addAttribute("worshipDetail", worshipDetail);
+            log.info("worshipDetail : {}", worshipDetail);
+
+            String videoId = null;
+            String pattern = "(?<=\\/live\\/|\\/v\\/|\\/e\\/|\\/embed\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed\\u200C\\u200B2F|youtu.be%2F|\\/e%2F|watch\\?v=|\\?v=)([^#\\&\\?\\n]*[^\\&\\?\\n])";
+            Pattern compiledPattern = Pattern.compile(pattern);
+            Matcher matcher = compiledPattern.matcher(worshipDetail.getLink());
+
+            if (matcher.find()) {
+                videoId = matcher.group();
+            }
+
+            log.info("videoId : {}", videoId);
+            model.addAttribute("videoId", videoId);
+        }
+
+        return "post/worshipDetail";
+    }
+
+    @GetMapping("/question")
+    public String getQuestionPage(Model model, HttpSession session) {
+
+
+
+        return "post/question";
+    }
+
 }

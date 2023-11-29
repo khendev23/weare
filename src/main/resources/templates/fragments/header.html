@@ -6,7 +6,7 @@
 </head>
 <div th:fragment="header">
     <nav  id="scrollspy" class="navbar navbar-light bg-light navbar-expand-lg fixed-top" data-spy="affix" data-offset-top="20">
-        <div sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}" style="position: absolute; left: 65%; border: 2px solid white; border-radius: 15px; padding: 7px;">
+        <div sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}" style="position: absolute; left: 62%; border: 2px solid white; border-radius: 15px; padding: 7px;">
             <h6 class="nav-link" style="font-size: 0.8rem;">사랑하고 축복합니다 <span th:text="${loggedInUser.userName}"></span>님!</h6>
             <div style="display: flex">
                 <a class="nav-link" target="_blank" th:href="@{admin}" sec:authorize="hasRole('ROLE_admin')" style=" font-size: 0.8rem;">관리자페이지 &nbsp;&nbsp;&nbsp;</a>
@@ -49,17 +49,18 @@
                         <li class="nav-item">
                             <a style="font-size: 1.3rem;" class="nav-link" th:href="@{announcement}">공지사항</a>
                         </li>
-                        <li class="nav-item">
-                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">자유게시판</a>
-                        </li>
+
                         <li class="nav-item">
                             <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">예배</a>
                         </li>
                         <li class="nav-item">
-                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{worship}">질문</a>
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{question}">질문</a>
                         </li>
                         <li class="nav-item">
                             <a style="font-size: 1.3rem;" class="nav-link" th:href="@{ministry}">사역</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{guestBook}">방명록</a>
                         </li>
                     </ul>
 

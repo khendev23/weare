@@ -3,7 +3,7 @@ package com.ep.weare.user.controller;
 import com.ep.weare.admin.entity.Kelly;
 import com.ep.weare.admin.service.AdminService;
 import com.ep.weare.post.entity.Announcement;
-import com.ep.weare.post.service.AnnounceService;
+import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.entity.Gender;
 import com.ep.weare.user.entity.UserCheck;
 import com.ep.weare.user.entity.UserEntity;
@@ -34,12 +34,12 @@ public class UserController {
 
     private PasswordEncoder passwordEncoder;
 
-    private AnnounceService postService;
+    private PostService postService;
 
     private AdminService adminService;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, AnnounceService postService,
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, PostService postService,
                           AdminService adminService) {
 
         this.userService = userService;
