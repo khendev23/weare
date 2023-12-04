@@ -2,6 +2,7 @@ package com.ep.weare.post.service;
 
 import com.ep.weare.post.entity.Announcement;
 import com.ep.weare.post.entity.AnnouncementAttach;
+import com.ep.weare.post.entity.Question;
 import com.ep.weare.post.entity.Worship;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,4 +44,18 @@ public interface PostService {
     void save(Worship worship);
 
     Optional<Worship> findWorshipById(int id);
+
+    Page<Question> findQuestionByKeywordWithPaging(String search, Pageable pageable);
+
+    Page<Question> findQuestionAll(Pageable pageable);
+
+    Optional<Question> findFirstByOrderByQuestionIdDesc();
+
+    void saveQuestion(Question question);
+
+    Optional<Question> findQuestionById(int id);
+
+    void deleteQuestionById(int questionId);
+
+    void deleteAnnounceAttachmentById(Integer attachmentId);
 }

@@ -2,9 +2,11 @@ package com.ep.weare.post.service;
 
 import com.ep.weare.post.entity.Announcement;
 import com.ep.weare.post.entity.AnnouncementAttach;
+import com.ep.weare.post.entity.Question;
 import com.ep.weare.post.entity.Worship;
 import com.ep.weare.post.repository.AnnounceAttachRepository;
 import com.ep.weare.post.repository.AnnounceRepository;
+import com.ep.weare.post.repository.QuestionRepository;
 import com.ep.weare.post.repository.WorshipRepository;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +26,19 @@ public class PostServiceImpl implements PostService {
     private AnnounceRepository announceRepository;
     private AnnounceAttachRepository announceAttachRepository;
     private WorshipRepository worshipRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     public PostServiceImpl(AnnounceRepository announceRepository,
                            AnnounceAttachRepository announceAttachRepository,
-                           WorshipRepository worshipRepository) {
+                           WorshipRepository worshipRepository,
+                           QuestionRepository questionRepository) {
+
         this.announceRepository = announceRepository;
         this.announceAttachRepository = announceAttachRepository;
         this.worshipRepository = worshipRepository;
+        this.questionRepository = questionRepository;
+
     }
 
 
@@ -68,7 +75,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deleteAnnounceById(int announceId) {
+        announceAttachRepository.deleteByAnnounceId(announceId);
         announceRepository.deleteById((long) announceId);
     }
 
@@ -127,5 +136,39 @@ public class PostServiceImpl implements PostService {
         return worshipRepository.findById((long) id);
     }
 
+    @Override
+    public Page<Question> findQuestionByKeywordWithPaging(String keyword, Pageable pageable) {
+        return questionRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+    }
+
+    @Override
+    public Page<Question> findQuestionAll(Pageable pageable) {
+        return questionRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Question> findFirstByOrderByQuestionIdDesc() {
+        return questionRepository.findFirstByOrderByQuestionIdDesc();
+    }
+
+    @Override
+    public void saveQuestion(Question question) {
+        questionRepository.save(question);
+    }
+
+    @Override
+    public Optional<Question> findQuestionById(int id) {
+        return questionRepository.findById((long) id);
+    }
+
+    @Override
+    public void deleteQuestionById(int questionId) {
+        questionRepository.deleteById((long) questionId);
+    }
+
+    @Override
+    public void deleteAnnounceAttachmentById(Integer attachmentId) {
+        announceAttachRepository.deleteById((long) attachmentId);
+    }
 
 }

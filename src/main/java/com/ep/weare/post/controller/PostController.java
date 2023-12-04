@@ -1,8 +1,12 @@
 package com.ep.weare.post.controller;
 
+import com.ep.weare.comment.dto.CommentCountByQuestionId;
+import com.ep.weare.comment.entity.CommentQuestion;
+import com.ep.weare.comment.service.CommentService;
 import com.ep.weare.common.Utils;
 import com.ep.weare.post.entity.Announcement;
 import com.ep.weare.post.entity.AnnouncementAttach;
+import com.ep.weare.post.entity.Question;
 import com.ep.weare.post.entity.Worship;
 import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.controller.UserController;
@@ -36,16 +40,20 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PostController {
 
-    private PostService postService;
+    private final PostService postService;
     private UserService userService;
-    private UserController userController;
+    private final UserController userController;
+    private final CommentService commentService;
 
     @Autowired
-    public PostController(PostService postService, UserService userService, UserController userController) {
+    public PostController(PostService postService, UserService userService, UserController userController,
+                          CommentService commentService) {
 
         this.postService = postService;
         this.userService = userService;
         this.userController = userController;
+        this.commentService = commentService;
+
     }
 
     // 공지사항 파일 저장 디렉토리
@@ -202,7 +210,8 @@ public class PostController {
         if (announcementOptional.isPresent()) {
             Announcement announcementDetail = announcementOptional.get();
             model.addAttribute("announcementDetail", announcementDetail);
-            log.info("announcementDetail : {}", announcementDetail);
+            List<AnnouncementAttach> attaches = postService.findById(announcementDetail.getAnnounceId());
+            model.addAttribute("attaches", attaches);
         }
 
         return "post/announceUpdate";
@@ -215,8 +224,49 @@ public class PostController {
                                           @RequestParam("title") String title,
                                           @RequestParam("content") String content,
                                           @RequestParam(name = "importantCheck", defaultValue = "x") String importantCheck,
+                                          @RequestParam(value = "fileCheckBox", required = false) List<Integer> attachmentIds,
                                           @RequestParam(name = "announceFile") List<MultipartFile> files) throws IOException {
         userController.updateModelWithUserInfo(model, session);
+
+        log.info("attachmentIds : {}", attachmentIds);
+
+        if(attachmentIds != null){
+            for (Integer attachmentId : attachmentIds) {
+                log.info("attachmentId : {}", attachmentId);
+                postService.deleteAnnounceAttachmentById(attachmentId);
+            }
+        }
+
+        // 첨부파일
+        List<AnnouncementAttach> attachments = new ArrayList<>();
+        if(files != null && !files.isEmpty()) {
+            for (int i = 0; i<files.size(); i++) {
+                MultipartFile file = files.get(i);
+                if(!file.isEmpty()) {
+                    String originalFilename = file.getOriginalFilename();
+                    String renamedFilename = Utils.getRenameFilename(originalFilename); // 20230807_142828888_123.jpg
+                    File destFile = new File(uploadDirectory, renamedFilename); // 부모디렉토리 생략가능. spring.servlet.multipart.location 값을 사용(기본값)
+                    file.transferTo(destFile);
+
+                    AnnouncementAttach attach = new AnnouncementAttach();
+
+                    Optional<AnnouncementAttach> attachOptional = postService.findFirstByOrderByAnnounceAttachmentIdDesc();
+
+                    if (attachOptional.isPresent()) {
+                        AnnouncementAttach announcementAttach = attachOptional.get();
+                        attach.setAnnounceAttachmentId(announcementAttach.getAnnounceAttachmentId() + i+1);
+                    } else {
+                        attach.setAnnounceAttachmentId(i+1);
+                    }
+
+                    attach.setAnnounceId(announceId);
+                    attach.setAnnounceOriginalFilename(originalFilename);
+                    attach.setAnnounceRenamedFilename(renamedFilename);
+
+                    attachments.add(attach);
+                }
+            }
+        }
 
         Optional<Announcement> announcementOptional = postService.findAnnounceById(announceId);
 
@@ -226,6 +276,8 @@ public class PostController {
             announcement.setTitle(title);
             announcement.setContent(content);
             announcement.setImportant(importantCheck.charAt(0));
+
+            announcement.setAttaches(attachments);
 
             postService.saveAnnounce(announcement);
         }
@@ -325,11 +377,142 @@ public class PostController {
     }
 
     @GetMapping("/question")
-    public String getQuestionPage(Model model, HttpSession session) {
+    public String getQuestionPage(Model model, HttpSession session,
+                                  @PageableDefault(page = 0, size = 10, sort = "questionId", direction = Sort.Direction.DESC) Pageable pageable,
+                                  @RequestParam(name = "search", required = false) String search) {
 
+        model.addAttribute("question", new Question());
 
+        userController.updateModelWithUserInfo(model, session);
+
+        // 검색어, 페이징 처리
+        Page<Question> pageList;
+
+        if (search != null && !search.isEmpty()) {
+            // 검색어가 있는 경우 검색 결과 및 페이징 처리 가져오기
+            pageList = postService.findQuestionByKeywordWithPaging(search, pageable);
+        } else {
+            // 검색어가 없는 경우 전체 공지사항 및 페이징 처리 가져오기
+            pageList = postService.findQuestionAll(pageable);
+        }
+
+        // 각 질문에 대한 댓글 수 가져오기
+        List<CommentCountByQuestionId> commentCounts = commentService.getCommentCountsForQuestions();
+        log.info("commentCounts:{}", commentCounts);
+        model.addAttribute("commentCounts", commentCounts);
+
+        int nowPage = pageList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, pageList.getTotalPages());
+
+        model.addAttribute("list", pageList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
 
         return "post/question";
+    }
+
+    @GetMapping("/questionCreate")
+    public String getQuestionCreate (Model model, HttpSession session) {
+        userController.updateModelWithUserInfo(model, session);
+        model.addAttribute("Question", new Question());
+        return "post/questionCreate";
+    }
+
+    // 질문 글쓰기 완료 버튼 클릭시
+    @PostMapping("/questionCreateComplete.do")
+    public String saveAnnounce (Model model, HttpSession session,
+                                @ModelAttribute("Question") Question question) {
+
+        // 로그인 계정 정보 추출
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        Optional<Question> questionOptional = postService.findFirstByOrderByQuestionIdDesc();
+
+        if (questionOptional.isPresent()) {
+            Question questionById = questionOptional.get();
+            question.setQuestionId(questionById.getQuestionId() + 1);
+        } else {
+            question.setQuestionId(1);
+        }
+
+        question.setUserId(username);
+
+        log.info("question : {}", question);
+
+        postService.saveQuestion(question);
+
+        return "redirect:/question";
+    }
+
+    // 질문 상세보기
+    @GetMapping("/questionDetail")
+    public String questionDetail (Model model, HttpSession session, @RequestParam("id") int id) {
+        userController.updateModelWithUserInfo(model, session);
+
+        Optional<Question> questionOptional = postService.findQuestionById(id);
+
+        if (questionOptional.isPresent()) {
+            Question questionDetail = questionOptional.get();
+            model.addAttribute("questionDetail", questionDetail);
+        }
+
+        // 댓글만(댓글레밸 == 1인 애들만)
+        List<CommentQuestion> comments = commentService.findCommentById(id);
+
+        // 대댓글만(댓글레밸 == 2인 애들만)
+        List<CommentQuestion> replies = commentService.findReplyById(id);
+
+        model.addAttribute("comments", comments);
+        model.addAttribute("replies", replies);
+
+        model.addAttribute("CommentQuestion", new CommentQuestion());
+
+        log.info("replies : {}", replies);
+
+        return "post/questionDetail";
+    }
+
+    // 질문 수정 클릭 시
+    @GetMapping("/questionUpdate")
+    public String getQuestionUpdatePage(Model model, HttpSession session,
+                                        @RequestParam("id") int id) {
+        userController.updateModelWithUserInfo(model, session);
+        model.addAttribute("Question", new Question());
+
+        Optional<Question> questionOptional = postService.findQuestionById(id);
+
+        if (questionOptional.isPresent()) {
+            Question questionDetail = questionOptional.get();
+            model.addAttribute("questionDetail", questionDetail);
+            log.info("questionDetail : {}", questionDetail);
+        }
+
+        return "post/questionUpdate";
+    }
+
+    // 수정 완료 클릭 시
+    @PostMapping("questionUpdateComplete.do")
+    public String questionUpdateComplete (Model model, HttpSession session,
+                                          @RequestParam("questionId") int questionId,
+                                          @RequestParam("title") String title,
+                                          @RequestParam("content") String content) {
+        userController.updateModelWithUserInfo(model, session);
+
+        Optional<Question> questionOptional = postService.findQuestionById(questionId);
+
+        if (questionOptional.isPresent()) {
+            Question question = questionOptional.get();
+
+            question.setTitle(title);
+            question.setContent(content);
+
+            postService.saveQuestion(question);
+        }
+
+        return "redirect:/questionDetail?id=" + questionId;
     }
 
 }

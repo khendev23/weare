@@ -1,5 +1,7 @@
 package com.ep.weare.post.controller;
 
+import com.ep.weare.comment.service.CommentService;
+import com.ep.weare.common.Utils;
 import com.ep.weare.post.service.PostService;
 import com.ep.weare.user.controller.UserController;
 import com.ep.weare.user.service.UserService;
@@ -24,17 +26,20 @@ import java.util.UUID;
 @Slf4j
 public class PostRestController {
 
-    private PostService postService;
-    private UserService userService;
-
-    private UserController userController;
+    private final PostService postService;
+    private final UserService userService;
+    private final UserController userController;
+    private final CommentService commentService;
 
     @Autowired
-    public PostRestController(PostService postService, UserService userService, UserController userController) {
+    public PostRestController(PostService postService, UserService userService, UserController userController,
+                              CommentService commentService) {
 
         this.postService = postService;
         this.userService = userService;
         this.userController = userController;
+        this.commentService = commentService;
+
     }
 
     // 공지사항 삭제
@@ -49,8 +54,8 @@ public class PostRestController {
     }
 
     // 공지사항 이미지 업로드(제출은 안한 상태)
-    @PostMapping(value="/uploadimage", produces = "application/json")
-    public JsonObject uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile) {
+    @PostMapping(value="/uploadAnnounceimage", produces = "application/json")
+    public JsonObject uploadAnnounceImageFile(@RequestParam("file") MultipartFile multipartFile) {
 
         JsonObject jsonObject = new JsonObject();
 
@@ -76,4 +81,45 @@ public class PostRestController {
 
         return jsonObject;
     }
+
+    // 질문 이미지 업로드(제출은 안한 상태)
+    @PostMapping(value="/uploadQuestionimage", produces = "application/json")
+    public JsonObject uploadQuestionImageFile(@RequestParam("file") MultipartFile multipartFile) {
+
+        JsonObject jsonObject = new JsonObject();
+
+        String fileRoot = "C:\\weareAttach\\questionImage\\";	//저장될 외부 파일 경로
+        String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
+
+        String savedFileName = Utils.getRenameFilename(originalFileName);	//저장될 파일 명
+
+        File targetFile = new File(fileRoot + savedFileName);
+
+        try {
+            InputStream fileStream = multipartFile.getInputStream();
+            FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
+            jsonObject.addProperty("url", "/weare/questionImage/"+savedFileName);
+            jsonObject.addProperty("responseCode", "success");
+
+        } catch (IOException e) {
+            FileUtils.deleteQuietly(targetFile);	//저장된 파일 삭제
+            jsonObject.addProperty("responseCode", "error");
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
+    // 질문 삭제
+    @PostMapping("/questionDelete.do")
+    public ResponseEntity<String> deleteQuestion (Model model, HttpSession session,
+                                                  @RequestParam int questionId) {
+        userController.updateModelWithUserInfo(model, session);
+
+        commentService.deleteByQuestionId(questionId);
+        postService.deleteQuestionById(questionId);
+
+        return ResponseEntity.ok("성공적으로 삭제되었습니다.");
+    }
+
 }

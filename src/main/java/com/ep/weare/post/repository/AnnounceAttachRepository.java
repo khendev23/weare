@@ -10,4 +10,6 @@ public interface AnnounceAttachRepository extends JpaRepository<AnnouncementAtta
     Optional<AnnouncementAttach> findFirstByOrderByAnnounceAttachmentIdDesc();
 
     List<AnnouncementAttach> findByAnnounceId(int announceId);
+
+    void deleteByAnnounceId(int announceId);
 }

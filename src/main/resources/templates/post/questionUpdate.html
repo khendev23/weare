@@ -24,40 +24,17 @@
     <section style="height: fit-content;">
         <br><br><br>
         <div style="display: flex; justify-content: center;">
-            <h3>공지사항</h3>
+            <h4>질문</h4>
         </div>
         <br>
         <div class="container">
             <hr>
-            <form th:action="@{announceUpdateComplete.do}" enctype="multipart/form-data" method="post">
-                <input type="hidden" name="announceId" th:value="${announcementDetail.announceId}">
-                <input type="text" name ="title" th:value="${announcementDetail.title}" style="border: none; width: 600px; font-size: 1.5rem; font-weight: 600;" placeholder="제목을 입력하세요.">
-                <hr>
-                <label for="importantCheckbox">중요</label>
-                <input type="checkbox" id="importantCheckbox" name="importantCheck" th:checked="${Announcement.important == 'o'}" th:value="${announcementDetail.important}">
-                <hr>
-                <div>
-                    <p style="padding-left: 30px; font-weight: 600;">첨부파일</p>
-                    <div style="padding-left: 30px; line-height:2;">
-                        <th:block th:each="attach : ${attaches}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
-                                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
-                                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-                            </svg>
-                            <a th:href="@{'/announceAttach/' + ${attach.announceRenamedFilename}}" th:attr="download=${attach.announceOriginalFilename}" style="padding-top: 10px; padding-bottom: 10px;" th:text="${attach.announceOriginalFilename}">
-                            </a>
-                            <input type="checkbox" id="deleteCheck" name="fileCheckBox" th:value="${attach.announceAttachmentId}">
-                            <label for="deleteCheck">삭제</label>
-                            <br>
-                        </th:block>
-                    </div>
-                </div>
-                <div style="margin-top: 10px; padding-left: 30px;">
-                    <input type="file" name="announceFile" multiple="multiple">
-                </div>
+            <form th:action="@{questionUpdateComplete.do}" method="post">
+                <input type="hidden" name="questionId" th:value="${questionDetail.questionId}">
+                <input type="text" name ="title" th:value="${questionDetail.title}" style="border: none; width: 600px; font-size: 1.5rem; font-weight: 600;" placeholder="제목을 입력하세요.">
                 <hr>
                 <div style="margin-top: 10px;">
-                    <textarea class="summernote" name="content" th:utext="${announcementDetail.content}"></textarea>
+                    <textarea class="summernote" name="content" th:utext="${questionDetail.content}"></textarea>
                 </div>
                 <div style="display: flex; justify-content: end">
                     <button class="btn-primary" type="submit" style="margin-top: 15px; border-radius: 20px;">완료</button>
@@ -101,20 +78,6 @@
 
         });
 
-        $(document).ready(function() {
-            // 체크박스 변경 이벤트 처리
-            $('#importantCheckbox').change(function() {
-                updateImportantValue();
-            });
-
-            // 상태 표시 및 값을 설정하는 함수
-            function updateImportantValue() {
-                var isChecked = $('#importantCheckbox').prop('checked');
-                var valueToSet = isChecked ? 'o' : 'x';
-                // 서버로 전송할 값을 설정
-                $('#importantCheckbox').val(valueToSet);
-            }
-        });
     </script>
 </div>
 </html>

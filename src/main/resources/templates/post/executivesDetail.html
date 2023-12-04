@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/default_layout}">
+<head>
+    <script th:src="@{assets/vendors/jquery/jquery-3.4.1.js}"></script>
+    <title>WeAre 임원게시판</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<div layout:fragment="content">
+    <div style="width: 100%; height: 90px; background-color:#2c3e50;"></div>
+    <section style="height: fit-content;">
+        <br><br><br>
+        <div style="display: flex; justify-content: center;">
+            <h3>임원 게시판</h3>
+        </div>
+        <br><br>
+        <th:block th:with="loggedInUser=${session.loggedInUser}">
+            <div th:if="${loggedInUser.userId == executivesDetail.userId}" style="max-width: 1160px; display: flex; justify-content: end; margin: auto; padding-right: 50px;">
+                <button type="button" id="patchNoticeBtn" style="border-style: none; font-size: 12px;">
+                    <a th:href="@{executivesUpdate(id=${executivesDetail.executivesId})}">수정</a>
+                </button>
+                &nbsp;|&nbsp;
+                <form action="">
+                    <input type="hidden" id="deleteNoticeInput" th:value="${executivesDetail.executivesId}">
+                    <button type="button" id="deleteNoticeBtn" style="border-style: none; font-size: 12px; height: 24px;">삭제</button>
+                </form>
+            </div>
+        </th:block>
+        <div style="max-width: 1060px; margin: auto;">
+            <hr>
+            <div style="display: flex; justify-content: center; padding: 15px 0 15px 0;">
+                <div style="width: 90px;">
+                    <div th:if="${executivesDetail.category == '회의록'}"
+                         style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 70px; display: flex; justify-content: center; color: white; background-color: #0d6efd;">
+                        회의록
+                    </div>
+                    <div th:if="${executivesDetail.category == '기획서'}"
+                         style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 70px; display: flex; justify-content: center; color: white; background-color: #0d5a4b;">
+                        기획서
+                    </div>
+                    <div th:if="${executivesDetail.category == '회계자료'}"
+                         style="border: 1px solid black; border-radius: 12px; padding: 2px; font-size: 12px; width: 70px; display: flex; justify-content: center; color: white; background-color: #e685b5;">
+                        회계자료
+                    </div>
+                </div>
+                <div style="width: 700px;">
+                    <span style="font-size: 18px; font-weight: 600;" th:text="${executivesDetail.title}"></span>
+                </div>
+                <div style="width: 150px;">
+                    <span style="font-size: 13px;" th:text="${executivesDetail.userId}"></span>
+                </div>
+                <div>
+                    <span style="font-size: 13px;" th:text="${executivesDetail.executivesCreatedAt}"></span>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <p style="padding-left: 30px; font-weight: 600;">첨부파일</p>
+                <div style="padding-left: 30px; line-height:2;">
+                    <th:block th:each="attach : ${attaches}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                            <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                        </svg>
+                        <a th:href="@{'/executivesAttach/' + ${attach.executivesRenamedFilename}}" th:attr="download=${attach.executivesOriginalFilename}" style="padding-top: 10px; padding-bottom: 10px;" th:text="${attach.executivesOriginalFilename}">
+                        </a>
+                        <br>
+                    </th:block>
+                </div>
+            </div>
+            <hr>
+            <div style="padding:30px; min-height: 600px;">
+                <span th:utext="${executivesDetail.content}"></span>
+            </div>
+            <hr>
+            <div style="display: flex; justify-content: center;">
+                <a th:href="@{executives}">
+                    <i class="bi bi-grid-3x3-gap-fill" style="font-size: 30px;"></i>
+                </a>
+            </div>
+            <br>
+        </div>
+
+<!--        <div style="max-width: 1060px; margin: auto;">-->
+<!--            <form id="commentForm" th:action="@{executives/commentCreate.do}" th:object="${CommentMinistry}" method="post">-->
+<!--                <div style="display:flex;">-->
+<!--                    <input type="hidden" name="ministryId" th:value="${ministryDetail.ministryId}">-->
+<!--                    <input type="text" name="commentContent" th:field="*{commentContent}"-->
+<!--                           style="padding-left: 10px; border: 1px solid black; height: 45px; display: flex; overflow: hidden; align-items: center; width: 94%;" placeholder="댓글을 입력해주세요">-->
+<!--                    <button type="submit"-->
+<!--                            style="width: 5%; margin-left: 1%; border-style: none; background-color: transparent">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">-->
+<!--                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>-->
+<!--                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>-->
+<!--                        </svg>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <br>-->
+<!--            </form>-->
+<!--        </div>-->
+
+<!--        <th:block th:with="loggedInUser=${session.loggedInUser}">-->
+<!--            <div style="max-width: 1060px; margin: auto; border: 1px solid #e3e3e3; border-top: none; line-height: 1;">-->
+<!--                <th:block th:each="comment, commentIndex : ${comments}">-->
+<!--                    <div style="padding: 15px 20px 0 20px; border-top: 1px solid #e3e3e3;">-->
+
+<!--                        &lt;!&ndash; 정상 댓글(삭제되지 않은 댓글) &ndash;&gt;-->
+<!--                        <th:block th:if="${comment.deleteCk != 'o'}">-->
+<!--                            <div style="display: inline-block; width: 100%; overflow: hidden;">-->
+<!--                                <h3 style="font-size: 13px; float: left; font-weight: 800;" th:text="${comment.userEntity.userName+'('+comment.userId+')'}"></h3>-->
+<!--                                <ul style="list-style: none; display: flex; float: right; font-size: 13px; color: #666; margin: 0;">-->
+<!--                                    <li th:onclick="'showReplyForm(\'replyForm\' + ' + ${commentIndex.index} + ')'"-->
+<!--                                        style="cursor: pointer;">대댓글</li>-->
+<!--                                    <li th:if="${loggedInUser.userId == comment.userId}"-->
+<!--                                        th:onclick="'deleteComment(' + ${comment.commentId} + ')'"-->
+<!--                                        style="padding-left: 20px; cursor: pointer;">삭제</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            <br>-->
+<!--                            <p th:text="${comment.commentContent}"></p>-->
+<!--                            <p style="font-size: 12px; color: #666;" th:text="${T(com.ep.weare.common.TimeUtil).getTimeAgoOrFormatted(comment.commentCreatedAt)}"></p>-->
+<!--                        </th:block>-->
+
+<!--                        &lt;!&ndash; 삭제된 댓글 &ndash;&gt;-->
+<!--                        <th:block th:if="${comment.deleteCk == 'o'}">-->
+<!--                            <div style="display: inline-block; width: 100%; overflow: hidden;">-->
+<!--                                <h3 style="font-size: 13px; float: left; font-weight: 800;">(삭제)</h3>-->
+<!--                            </div>-->
+<!--                            <br>-->
+<!--                            <p>삭제된 댓글입니다.</p>-->
+<!--                            <p style="font-size: 12px; color: #666;"></p>-->
+<!--                        </th:block>-->
+
+<!--                        <th:block th:each="reply : ${replies}" >-->
+<!--                            <div th:if="${comment.commentId == reply.commentRef}" style="margin-left: 30px; margin-bottom: 10px; border: 1px solid #e3e3e3; border-top: none; background-color: #f9f9f9;">-->
+<!--                                <div style="padding: 10px 10px 0 10px; border-top: 1px solid #e3e3e3;">-->
+
+<!--                                    &lt;!&ndash; 정상 대댓글 &ndash;&gt;-->
+<!--                                    <th:block th:if="${reply.deleteCk == 'x'}">-->
+<!--                                        <div style="display: inline-block; width: 100%;">-->
+<!--                                            <h3 style="font-size: 13px; float: left; font-weight: 800;" th:text="${reply.userEntity.userName+'('+reply.userId+')'}"></h3>-->
+<!--                                            <ul style="list-style: none; display: flex; float: right; font-size: 13px; color: #666; margin: 0;">-->
+<!--                                                <li th:if="${loggedInUser.userId == reply.userId}"-->
+<!--                                                    th:onclick="'deleteComment(' + ${reply.commentId} + ')'"-->
+<!--                                                    style="padding-left: 20px; cursor: pointer;">삭제</li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                        <br>-->
+<!--                                        <p th:text="${reply.commentContent}"></p>-->
+<!--                                        <p style="font-size: 12px; color: #666;" th:text="${T(com.ep.weare.common.TimeUtil).getTimeAgoOrFormatted(reply.commentCreatedAt)}"></p>-->
+<!--                                    </th:block>-->
+
+<!--                                    &lt;!&ndash; 삭제 대댓글 &ndash;&gt;-->
+<!--                                    <th:block th:if="${reply.deleteCk == 'o'}">-->
+<!--                                        <div style="display: inline-block; width: 100%;">-->
+<!--                                            <h3 style="font-size: 13px; float: left; font-weight: 800;">(삭제)</h3>-->
+<!--                                        </div>-->
+<!--                                        <br>-->
+<!--                                        <p>삭제된 댓글입니다.</p>-->
+<!--                                        <p style="font-size: 12px; color: #666;"></p>-->
+<!--                                    </th:block>-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </th:block>-->
+
+<!--                        <form th:id="'replyForm' + ${commentIndex.index}" th:action="@{ministry/replyCreate.do}" th:object="${CommentMinistry}" method="post" style="display: none;">-->
+<!--                            <div style="display:flex; margin-left: 30px; background-color: #f9f9f9;">-->
+<!--                                <input type="hidden" name="ministryId" th:value="${ministryDetail.ministryId}">-->
+<!--                                <input type="hidden" name="commentRef" th:value="${comment.commentId}">-->
+<!--                                <input type="text" th:id="'replyInput' + ${commentIndex.index}" th:field="*{commentContent}"-->
+<!--                                       style="padding-left: 10px; border: 1px solid black; height: 45px; display: flex; overflow: hidden; align-items: center; width: 94%;" placeholder="댓글을 입력해주세요">-->
+<!--                                <button type="submit" style="width: 5%; margin-left: 1%; border-style: none; background-color: transparent">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">-->
+<!--                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>-->
+<!--                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>-->
+<!--                                    </svg>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <br>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </th:block>-->
+<!--            </div>-->
+<!--        </th:block>-->
+        <br>
+
+    </section>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // 삭제 버튼 클릭 시 공지사항 삭제
+            $('#deleteNoticeBtn').on('click', function() {
+                const executivesId = $('#deleteNoticeInput').val();
+
+                console.log(executivesId);
+
+                if(confirm("정말 삭제하시겠습니까?(❗복구가 불가능합니다.)")) {
+                    $.ajax({
+                        url: "/weare/executivesDelete.do", // 실제 삭제 엔드포인트로 교체
+                        type: 'POST', // 또는 서버 구성에 따라 'DELETE'
+                        data: { executivesId: executivesId },
+                        success: function(response) {
+                            alert(response);
+                            window.location.href = '/weare/executives';
+                        },
+                        error: function(error) {
+                            alert('삭제 중 오류가 발생했습니다.');
+                        }
+                    });
+                }
+
+
+            });
+        });
+
+        // var isReplyFormVisible = false;
+        //
+        // function showReplyForm(formId) {
+        //     var replyForm = document.getElementById(formId);
+        //     if (!isReplyFormVisible) {
+        //         replyForm.style.display = 'block';
+        //         isReplyFormVisible = true;
+        //     } else {
+        //         replyForm.style.display = 'none';
+        //         isReplyFormVisible = false;
+        //     }
+        // }
+
+        // function deleteComment(commentId) {
+        //
+        //     if(confirm("정말 삭제하시겠습니까?(❗복구가 불가능합니다.)")) {
+        //         $.ajax({
+        //             url: "/weare/ministry/deleteComment.do", // 실제 삭제 엔드포인트로 교체
+        //             type: 'POST', // 또는 서버 구성에 따라 'DELETE'
+        //             data: { commentId: commentId },
+        //             success: function(response) {
+        //                 alert(response);
+        //                 location.reload();
+        //             },
+        //             error: function(error) {
+        //                 alert('공지사항 삭제 중 오류가 발생했습니다.');
+        //             }
+        //         });
+        //     }
+        // }
+    </script>
+</div>
+</html>
