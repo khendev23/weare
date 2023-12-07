@@ -3,8 +3,11 @@ package com.ep.weare.admin.service;
 import com.ep.weare.admin.entity.Kelly;
 import com.ep.weare.admin.repository.AdminRepository;
 import com.ep.weare.admin.repository.KellyRepository;
-import com.ep.weare.user.entity.UserCheck;
-import com.ep.weare.user.entity.UserEntity;
+import com.ep.weare.user.entity.*;
+import com.ep.weare.user.repository.AuthorityRepository;
+import com.ep.weare.user.repository.ExecutivesRankRepository;
+import com.ep.weare.user.repository.TeamRepository;
+import com.ep.weare.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +18,22 @@ import java.util.Optional;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    private AdminRepository adminRepository;
-    private KellyRepository kellyRepository;
+    private final AdminRepository adminRepository;
+    private final KellyRepository kellyRepository;
+    private final TeamRepository teamRepository;
+    private final ExecutivesRankRepository executivesRankRepository;
+    private final AuthorityRepository authorityRepository;
+    private final UserRepository userRepository;
 
-    public AdminServiceImpl(AdminRepository adminRepository, KellyRepository kellyRepository) {
+    public AdminServiceImpl(AdminRepository adminRepository, KellyRepository kellyRepository,
+                            TeamRepository teamRepository, ExecutivesRankRepository executivesRankRepository,
+                            AuthorityRepository authorityRepository, UserRepository userRepository) {
         this.adminRepository = adminRepository;
         this.kellyRepository = kellyRepository;
+        this.teamRepository = teamRepository;
+        this.executivesRankRepository = executivesRankRepository;
+        this.authorityRepository = authorityRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -60,6 +73,36 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Kelly> findAllByOrderByKellyIdDesc() {
         return kellyRepository.findAllByOrderByKellyIdDesc();
+    }
+
+    @Override
+    public Optional<UserEntity> findByUserId(String userId) {
+        return adminRepository.findById(userId);
+    }
+
+    @Override
+    public List<Team> findTeamAll() {
+        return teamRepository.findAll();
+    }
+
+    @Override
+    public List<ExecutivesRank> findRankAll() {
+        return executivesRankRepository.findAll();
+    }
+
+    @Override
+    public Optional<Authority> findAuthorityByUserId(String userId) {
+        return authorityRepository.findById(userId);
+    }
+
+    @Override
+    public void saveAuthority(Authority authority) {
+        authorityRepository.save(authority);
+    }
+
+    @Override
+    public void saveUser(UserEntity userEntity) {
+        userRepository.save(userEntity);
     }
 
 

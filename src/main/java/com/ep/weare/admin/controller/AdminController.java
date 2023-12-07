@@ -3,8 +3,9 @@ package com.ep.weare.admin.controller;
 import com.ep.weare.admin.entity.Kelly;
 import com.ep.weare.admin.service.AdminService;
 import com.ep.weare.common.Utils;
-import com.ep.weare.user.entity.UserCheck;
-import com.ep.weare.user.entity.UserEntity;
+import com.ep.weare.ministry.service.MinistryService;
+import com.ep.weare.user.entity.*;
+import com.ep.weare.user.service.UserService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +31,13 @@ import java.util.Optional;
 @Slf4j
 public class AdminController {
 
-    private AdminService adminService;
+    private final AdminService adminService;
+    private final MinistryService ministryService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, MinistryService ministryService) {
         this.adminService = adminService;
+        this.ministryService = ministryService;
     }
 
     // 켈리 파일 저장 디렉토리
@@ -47,6 +51,19 @@ public class AdminController {
         List<UserEntity> unCheckedUserList = adminService.findByUserCheck(UserCheck.x);
         List<UserEntity> checkedUserList = adminService.findByUserCheck(UserCheck.o);
 
+        // 사역팀 목록 전달
+        List<MinistryTeam> ministryTeams = ministryService.findAll();
+
+        // 조 목록 전달
+        List<Team> teams = adminService.findTeamAll();
+
+        // 직급 목록 전달
+        List<ExecutivesRank> executivesRanks = adminService.findRankAll();
+
+        model.addAttribute("executivesRanks", executivesRanks);
+        model.addAttribute("teams", teams);
+        model.addAttribute("ministryTeams", ministryTeams);
+        model.addAttribute("userEntity", new UserEntity());
         model.addAttribute("unCheckedUserList", unCheckedUserList);
         model.addAttribute("checkedUserList", checkedUserList);
 
@@ -113,6 +130,43 @@ public class AdminController {
         redirectAttr.addFlashAttribute("msg", "켈리가 정상적으로 등록되었습니다.");
 
         return "redirect:/kellyManage";
+    }
+
+    @PostMapping("/userUpdateByAdmin.do")
+    public String userUpdateByAdmin (@ModelAttribute("userEntity") UserEntity userEntity) {
+
+        Optional<Authority> authorityOptional = adminService.findAuthorityByUserId(userEntity.getUserId());
+
+        if(authorityOptional.isPresent()) {
+
+            Authority authority = authorityOptional.get();
+
+            switch (userEntity.getRankName()) {
+                case "간사":
+                case "회장":
+                case "총무":
+                case "서기":
+                case "회계":
+                    authority.setAuthority("leader");
+                    adminService.saveAuthority(authority);
+                    adminService.saveUser(userEntity);
+                    break;
+                case "관리자":
+                    authority.setAuthority("admin");
+                    adminService.saveAuthority(authority);
+                    adminService.saveUser(userEntity);
+                    break;
+                default:
+                    authority.setAuthority("user");
+                    adminService.saveAuthority(authority);
+                    userEntity.setRankName(null);
+                    adminService.saveUser(userEntity);
+                    break;
+            }
+
+        }
+
+        return "redirect:/admin";
     }
 
 }

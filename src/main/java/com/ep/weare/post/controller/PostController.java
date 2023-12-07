@@ -200,7 +200,9 @@ public class PostController {
     @GetMapping("/announceUpdate")
     public String getAnnounceUpdatePage(Model model, HttpSession session,
                                         @RequestParam("id") int id) {
-        userController.updateModelWithUserInfo(model, session);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
         model.addAttribute("Announcement", new Announcement());
 
         Optional<Announcement> announcementOptional = postService.findAnnounceById(id);
@@ -209,6 +211,13 @@ public class PostController {
 
         if (announcementOptional.isPresent()) {
             Announcement announcementDetail = announcementOptional.get();
+
+            String postAuthor = announcementDetail.getUserId();
+
+            if(!username.equals(postAuthor)) {
+                return "redirect:/announcement";
+            }
+
             model.addAttribute("announcementDetail", announcementDetail);
             List<AnnouncementAttach> attaches = postService.findById(announcementDetail.getAnnounceId());
             model.addAttribute("attaches", attaches);
@@ -479,13 +488,22 @@ public class PostController {
     @GetMapping("/questionUpdate")
     public String getQuestionUpdatePage(Model model, HttpSession session,
                                         @RequestParam("id") int id) {
-        userController.updateModelWithUserInfo(model, session);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
         model.addAttribute("Question", new Question());
 
         Optional<Question> questionOptional = postService.findQuestionById(id);
 
         if (questionOptional.isPresent()) {
             Question questionDetail = questionOptional.get();
+
+            String postAuthor = questionDetail.getUserId();
+
+            if(!username.equals(postAuthor)) {
+                return "redirect:/question";
+            }
+
             model.addAttribute("questionDetail", questionDetail);
             log.info("questionDetail : {}", questionDetail);
         }

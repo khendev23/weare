@@ -98,7 +98,7 @@
                   <td th:text="${user.phone}"></td>
                   <td th:text="${user.address}"></td>
                   <td>
-                    <button type="button" class="btn btn-primary" th:data-userId="${user.userId}" th:onclick="approveUser(this.getAttribute('data-userId'))">승인하기</button>
+                    <button type="button" class="btn btn-primary" th:data-usersId="${user.userId}" th:onclick="approveUser(this.getAttribute('data-usersId'))">승인하기</button>
                   </td>
                 </tr>
               </tbody>
@@ -115,7 +115,7 @@
         </div>
         <div class="card-body">
           <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-            <table class="table align-middle">
+            <table class="table align-middle table-hover" id="myTable">
               <thead>
               <tr>
                 <th scope="col">#</th>
@@ -130,7 +130,12 @@
               </tr>
               </thead>
               <tbody class="table-group-divider">
-              <tr th:each="user, userStat : ${checkedUserList}">
+              <tr th:each="user, userStat : ${checkedUserList}" data-bs-toggle="modal" data-bs-target="#userListModal"
+                  th:attr="data-user-id=${user.userId}, data-user-name=${user.userName},
+                  data-user-rankName=${user.rankName != null ? user.rankName : '없음'}, data-user-teamName=${user.teamName},
+                  data-user-msTeamName=${user.msTeamName}, data-user-birthday=${user.birthday}, data-user-phone=${user.phone},
+                  data-user-address=${user.address}, data-user-password=${user.userPw}, data-user-email=${user.email},
+                  data-user-gender=${user.gender}, data-user-check=${user.userCheck}">
                 <th scope="row" th:text="${userStat.index + 1}"></th>
                 <td th:text="${user.userId}"></td>
                 <td th:text="${user.userName}"></td>
@@ -147,6 +152,75 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="userListModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">회원 정보</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" th:action="@{userUpdateByAdmin.do}" th:object="${userEntity}">
+            <input type="hidden" id="password" th:field="*{userPw}" readonly>
+            <input type="hidden" id="userCheck" th:field="*{userCheck}" readonly>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="userId" class="col-form-label">아이디:</label>
+                <input type="text" class="form-control" id="userId" name="userId" th:field="*{userId}" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="userName" class="col-form-label">이름:</label>
+                <input type="text" class="form-control" id="userName" name="userName" th:field="*{userName}" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="rank" class="col-form-label">직급:</label>
+                <select th:field="*{rankName}" id="rank" class="form-control">
+                  <option value="없음">없음</option>
+                  <option th:each="rank : ${executivesRanks}" th:value="${rank.rankName}" th:text="${rank.rankName}"></option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="team" class="col-form-label">조</label>
+                <select th:field="*{teamName}" id="team" class="form-control">
+                  <option th:each="t : ${teams}" th:value="${t.teamName}" th:text="${t.teamName}"></option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="msteam" class="col-form-label">사역팀</label>
+                <select th:field="*{msTeamName}" id="msteam" class="form-control">
+                  <option th:each="ministrTeam : ${ministryTeams}" th:value="${ministrTeam.msteamName}" th:text="${ministrTeam.msteamName}"></option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="birthday" class="col-form-label">생일</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" th:field="*{birthday}" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="col-form-label">휴대폰</label>
+                <input type="text" class="form-control" id="phone" name="phone" th:field="*{phone}" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="col-form-label">주소</label>
+                <input type="text" class="form-control" id="address" name="address" th:field="*{address}" readonly>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="col-form-label">이메일</label>
+                <input type="text" class="form-control" id="email" name="address" th:field="*{email}" readonly>
+              </div>
+              <div class="mb-3">
+                <input type="hidden" class="form-control" id="gender" name="address" th:field="*{gender}" readonly>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" id="userUpdateByAdmin" >수정</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -157,6 +231,9 @@
 </body>
 
 <script>
+
+  var header = $("meta[name='_csrf_header']").attr('content');
+  var token = $("meta[name='_csrf']").attr('content');
   function approveUser(userId) {
     // 사용자에게 확인을 받고 승인할지 여부 확인
     var confirmApproval = confirm("사용자를 승인하시겠습니까?");
@@ -169,6 +246,9 @@
         type: "POST",
         url: "/weare/admin/approveUser.do",
         data: { userId: userId },
+        beforeSend: function(xhr){
+          xhr.setRequestHeader(header, token);
+        },
         success: function(response) {
           // 서버 응답을 처리
           console.log(response);
@@ -182,6 +262,46 @@
       });
     }
   }
+
+  $(document).ready(function () {
+    $('#myTable tbody tr').on('click', function () {
+      // 클릭된 행의 data-user-id 속성 값을 가져오기
+      var userId = $(this).data('user-id');
+      var userName = $(this).data('user-name');
+      var rank = $(this).attr('data-user-rankName');
+      var team = $(this).attr('data-user-teamName');
+      var msTeam = $(this).attr('data-user-msteamName');
+      var birthday = $(this).data('user-birthday');
+      var phone = $(this).data('user-phone');
+      var address = $(this).data('user-address');
+      var password = $(this).data('user-password');
+      var email = $(this).data('user-email');
+      var gender = $(this).data('user-gender');
+      var userCheck = $(this).data('user-check');
+
+      console.log(rank);
+
+
+      // 받은 사용자 정보를 모달에 표시
+      $('#userId').val(userId);
+      $('#userName').val(userName);
+      $('#rank option[value="' + rank + '"]').prop('selected', true);
+      $('#team option[value="' + team + '"]').prop('selected', true);
+      $('#msteam option[value="' + msTeam + '"]').prop('selected', true);
+      $('#birthday').val(birthday);
+      $('#phone').val(phone);
+      $('#address').val(address);
+      $('#password').val(password);
+      $('#email').val(email);
+      $('#gender').val(gender);
+      $('#userCheck').val(userCheck);
+
+      // 모달 열기
+      $('#userListModal').modal('show');
+    });
+  });
+
+
 </script>
 
 </html>

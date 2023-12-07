@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -70,6 +71,8 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+//        http.csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
+
         http
                 .authorizeHttpRequests(authorize -> authorize
 //                .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -84,7 +87,7 @@ public class WebSecurityConfig {
                         new AntPathRequestMatcher("/kelly/**")
                 ).permitAll()
                 .requestMatchers(
-                        new AntPathRequestMatcher("/leader/**")
+                        new AntPathRequestMatcher("/executives/**")
                 ).hasRole("leader")
                 .requestMatchers(
                         new AntPathRequestMatcher("/admin/**")
@@ -116,7 +119,7 @@ public class WebSecurityConfig {
                 sessionManagement.invalidSessionUrl("/home")
         );
 
-        http.csrf(AbstractHttpConfigurer::disable);
+
 
         return http.build();
     }

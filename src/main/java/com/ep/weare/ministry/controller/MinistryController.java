@@ -232,13 +232,22 @@ public class MinistryController {
     @GetMapping("/ministryUpdate")
     public String getMinistryUpdatePage(Model model, HttpSession session,
                                         @RequestParam("id") int id) {
-        userController.updateModelWithUserInfo(model, session);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
         model.addAttribute("Ministry", new Ministry());
 
         Optional<Ministry> ministryOptional = ministryService.findMinistryById(id);
 
         if (ministryOptional.isPresent()) {
             Ministry ministryDetail = ministryOptional.get();
+
+            String postAuthor = ministryDetail.getUserId();
+
+            if(!username.equals(postAuthor)) {
+                return "redirect:/executives";
+            }
+
             model.addAttribute("ministryDetail", ministryDetail);
             log.info("ministryDetail : {}", ministryDetail);
 

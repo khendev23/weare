@@ -42,7 +42,7 @@
                                 <br>
                                 <label for="userPw">비밀번호<span style="color: red;">*</span></label>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="password" style="width: 60%; height: 40px;" th:field="*{userPw}" placeholder=" 비밀번호를 입력해주세요" value="" required><br>
+                                <input type="password" style="width: 60%; height: 40px;" id="userPw" th:field="*{userPw}" placeholder=" 비밀번호를 입력해주세요" value="" required><br>
                                 <p id="pwErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
                             </div>
 
@@ -58,7 +58,7 @@
                                 <br>
                                 <label for="userName">이름<span style="color: red;">*</span></label>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="text" style="width: 60%; height: 40px; margin-left: 4px;" th:field="*{userName}" placeholder=" 이름을 입력해주세요" value="" required><br>
+                                <input type="text" style="width: 60%; height: 40px; margin-left: 4px;" id="userName" th:field="*{userName}" placeholder=" 이름을 입력해주세요" value="" required><br>
                                 <p id="nameErr" style="padding-left: 8.5rem; display: none; color: red;"></p>
                             </div>
 

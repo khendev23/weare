@@ -119,6 +119,8 @@
                         <th:block th:if="${comment.deleteCk != 'o'}">
                             <div style="display: inline-block; width: 100%; overflow: hidden;">
                                 <h3 style="font-size: 13px; float: left; font-weight: 800;" th:text="${comment.userEntity.userName+'('+comment.userId+')'}"></h3>
+                                &nbsp;
+                                <span style="font-size: 12px;" th:text="${comment.userEntity.msTeamName} + '팀'"></span>
                                 <ul style="list-style: none; display: flex; float: right; font-size: 13px; color: #666; margin: 0;">
                                     <li th:onclick="'showReplyForm(\'replyForm\' + ' + ${commentIndex.index} + ')'"
                                         style="cursor: pointer;">대댓글</li>
@@ -150,6 +152,8 @@
                                     <th:block th:if="${reply.deleteCk == 'x'}">
                                         <div style="display: inline-block; width: 100%;">
                                             <h3 style="font-size: 13px; float: left; font-weight: 800;" th:text="${reply.userEntity.userName+'('+reply.userId+')'}"></h3>
+                                            &nbsp;
+                                            <span style="font-size: 12px;" th:text="${reply.userEntity.msTeamName} + '팀'"></span>
                                             <ul style="list-style: none; display: flex; float: right; font-size: 13px; color: #666; margin: 0;">
                                                 <li th:if="${loggedInUser.userId == reply.userId}"
                                                     th:onclick="'deleteComment(' + ${reply.commentId} + ')'"
