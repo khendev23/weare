@@ -70,6 +70,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteByMinistryId(int ministryId) {
         commentMinistryRepository.deleteByMinistryId(ministryId);
     }

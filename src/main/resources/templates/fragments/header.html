@@ -6,6 +6,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <meta name="_csrf" th:content="${_csrf.token}">
 </head>
+
 <div th:fragment="header">
     <nav  id="scrollspy" class="navbar navbar-light bg-light navbar-expand-lg fixed-top" data-spy="affix" data-offset-top="20">
         <div sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}" style="position: absolute; left: 62%; border: 2px solid white; border-radius: 15px; padding: 7px;">
@@ -34,16 +35,16 @@
                     </li>
                 </ul>
                 <th:block sec:authorize="isAuthenticated()" th:with="loggedInUser=${session.loggedInUser}">
-                    <ul class="navbar-nav"  th:if="${loggedInUser.userCheck == T(com.ep.weare.user.entity.UserCheck).o}" style="margin-left: 10%;">
+                    <ul class="navbar-nav"  th:if="${loggedInUser.userCheck == T(com.ep.weare.user.entity.UserCheck).o}" style="margin-left: 5%;">
                         <li class="nav-item">
                             <div class="dropdown">
                                 <button class="dropbtn" style="border-style: none; background: transparent;">
-                                    <span style="font-size: 1.3rem;" class="nav-link">우리는</span>
+                                    <span style="font-size: 1.3rem; cursor: pointer;" class="nav-link">우리는</span>
                                 </button>
                                 <div class="dropdown-content">
-                                    <a class="nav-link" th:href="@{weareintro}" style="color: black;">우리는 소개</a>
-                                    <a class="nav-link" th:href="@{ministryintro.html}" style="color: black;">우리는 사역소개</a>
-                                    <hr>
+<!--                                    <a class="nav-link" th:href="@{weareintro}" style="color: black;">우리는 소개</a>-->
+<!--                                    <a class="nav-link" th:href="@{ministryintro.html}" style="color: black;">우리는 사역소개</a>-->
+<!--                                    <hr>-->
                                     <a class="nav-link" th:href="@{2023weare}" target="_blank" style="color: black;">2023 우리는</a>
                                 </div>
                             </div>
@@ -62,7 +63,10 @@
                             <a style="font-size: 1.3rem;" class="nav-link" th:href="@{ministry}">사역</a>
                         </li>
                         <li class="nav-item">
-                            <a style="font-size: 1.3rem;" class="nav-link" th:href="@{guestBook}">방명록</a>
+                            <a style="font-size: 1.3rem; cursor: pointer;" class="nav-link" th:onclick="showAlert()">방명록</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="font-size: 1.3rem;" class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf0kpFHs2iqp8-AG_UP8VQ6T36WCYJoB5fkINj-9RC2PeDGjg/viewform?usp=sf_link" target="_blank">피드백</a>
                         </li>
                     </ul>
 
@@ -81,6 +85,10 @@
             logoutFrm.submit();
 
         };
+
+        function showAlert() {
+            alert('서비스 준비중입니다');
+        }
 
     </script>
 </div>

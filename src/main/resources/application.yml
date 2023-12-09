@@ -26,6 +26,11 @@ spring:
   mvc:
     converters:
       preferred-json-mapper: gson
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
 # logback
 logging:
   level:

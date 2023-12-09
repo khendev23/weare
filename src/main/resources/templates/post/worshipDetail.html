@@ -5,6 +5,8 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/default_layout}">
 <head>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
@@ -87,6 +89,10 @@
     </section>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+
+        var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+
         $(document).ready(function() {
 
             // 삭제 버튼 클릭 시 공지사항 삭제
@@ -100,6 +106,9 @@
                         url: "/weare/announceDelete.do", // 실제 삭제 엔드포인트로 교체
                         type: 'POST', // 또는 서버 구성에 따라 'DELETE'
                         data: { worshipId: worshipId },
+                        beforeSend: function(xhr){
+                            xhr.setRequestHeader(header, token);
+                        },
                         success: function(response) {
                             alert(response);
                             window.location.href = '/weare/worship';
