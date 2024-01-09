@@ -84,7 +84,7 @@ public class WebSecurityConfig {
                         new AntPathRequestMatcher("/userCreate.do"),
                         new AntPathRequestMatcher("/login"),
                         new AntPathRequestMatcher("/summernoteImage/**"),
-                        new AntPathRequestMatcher("/kelly/**")
+                        new AntPathRequestMatcher("/weareKelly/**")
                 ).permitAll()
                 .requestMatchers(
                         new AntPathRequestMatcher("/executives/**")

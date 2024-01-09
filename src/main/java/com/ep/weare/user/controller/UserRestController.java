@@ -34,7 +34,6 @@ public class UserRestController {
 
         // 직접 boolean 값을 반환
         return ResponseEntity.ok(isDuplicate);
-
     }
 
 }

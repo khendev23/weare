@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    volumes:
+      - ./src/main/resources/application.yml:/app/src/main/resources/application.yml

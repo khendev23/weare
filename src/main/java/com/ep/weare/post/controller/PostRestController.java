@@ -59,7 +59,8 @@ public class PostRestController {
 
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\weareAttach\\announceImage\\";	//저장될 외부 파일 경로
+//        String fileRoot = "C:\\weareAttach\\announceImage\\";	// 로컬용
+        String fileRoot = "/sukey0331/tomcat/webapps/announceImage/";	//저장될 외부 파일 경로
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 
@@ -70,7 +71,7 @@ public class PostRestController {
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-            jsonObject.addProperty("url", "/weare/announceImage/"+savedFileName);
+            jsonObject.addProperty("url", "/announceImage/"+savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
         } catch (IOException e) {
@@ -88,7 +89,8 @@ public class PostRestController {
 
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\weareAttach\\questionImage\\";	//저장될 외부 파일 경로
+//        String fileRoot = "C:\\weareAttach\\questionImage\\";	// 로컬용
+        String fileRoot = "/sukey0331/tomcat/webapps/questionImage/";	// 로컬용
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 
         String savedFileName = Utils.getRenameFilename(originalFileName);	//저장될 파일 명
@@ -98,7 +100,7 @@ public class PostRestController {
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-            jsonObject.addProperty("url", "/weare/questionImage/"+savedFileName);
+            jsonObject.addProperty("url", "/questionImage/"+savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
         } catch (IOException e) {

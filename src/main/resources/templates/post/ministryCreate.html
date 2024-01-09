@@ -4,6 +4,8 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/default_layout}">
 <head>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>WeAre</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -20,7 +22,7 @@
     </STYLE>
 </head>
 <div layout:fragment="content">
-    <div style="width: 100%; height: 100px; background-color:#2c3e50;"></div>
+    <div style="width: 100%; height: 143px; background-color:#2c3e50;"></div>
     <section style="height: fit-content;">
         <br><br><br>
         <div style="display: flex; justify-content: center;">
@@ -52,6 +54,9 @@
         <br>
     </section>
     <script>
+        var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+
         $('#summernote').summernote({
             // 에디터 높이
             height: 600,
@@ -108,10 +113,13 @@
             $.ajax({
                 data : form_data,
                 type : "POST",
-                url : '/weare/uploadMinistryImage',
+                url : '/uploadMinistryImage',
                 cache : false,
                 contentType : false,
                 processData : false,
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
                 success : function(data) {
                     $(el).summernote('insertImage', data.url);
                 }

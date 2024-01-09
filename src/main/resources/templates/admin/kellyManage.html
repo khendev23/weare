@@ -5,6 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <title>WeAreAdmin</title>
     <link rel="stylesheet" th:href="@{assets/css/admin.styles.min.css}"/>
 </head>
@@ -81,7 +83,9 @@
                         </div>
                         <form th:action="@{kellyCreate.do}" enctype="multipart/form-data" method="post">
                             <div class="modal-body">
-                                <input type="file" name="kellyFile" multiple="multiple">
+                                <label for="bible">성경구절 : </label>
+                                <input type="text" id="bible" name="bibleVerse" required>
+                                <input type="file" name="kellyFile" multiple="multiple" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">추가하기</button>
@@ -125,6 +129,9 @@
 </body>
 
 <script>
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+
     function approveUser(userId) {
         // 사용자에게 확인을 받고 승인할지 여부 확인
         var confirmApproval = confirm("사용자를 승인하시겠습니까?");
@@ -137,6 +144,9 @@
                 type: "POST",
                 url: "/weare/admin/approveUser.do",
                 data: { userId: userId },
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(header, token);
+                },
                 success: function(response) {
                     // 서버 응답을 처리
                     console.log(response);

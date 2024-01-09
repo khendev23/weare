@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     // 켈리 파일 저장 디렉토리
-    @Value("${file.upload.directory.kelly:C:/weareAttach/kelly}")
+    @Value("${file.upload.directory.kelly:tomcat/webapps/kelly}")
     String uploadDirectory;
 
     // 어드민 페이지 이동
@@ -95,7 +95,10 @@ public class AdminController {
     @PostMapping("kellyCreate.do")
     public String kellyCreate (Model model,
                                RedirectAttributes redirectAttr,
+                               @RequestParam String bibleVerse,
                                @RequestParam(value = "kellyFile", required = false) List<MultipartFile> files) throws IOException {
+
+        log.info("bibleVerse : {}", bibleVerse);
 
         // 1. 파일저장
         List<Kelly> attachments = new ArrayList<>();
@@ -120,7 +123,7 @@ public class AdminController {
 
                     attach.setKellyOriginalFilename(originalFilename);
                     attach.setKellyRenamedFilename(renamedFilename);
-
+                    attach.setBibleVerse(bibleVerse);
                     attachments.add(attach);
                     adminService.insertKelly(attach);
                 }

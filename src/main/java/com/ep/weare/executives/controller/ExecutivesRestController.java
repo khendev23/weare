@@ -47,7 +47,8 @@ public class ExecutivesRestController {
 
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\weareAttach\\executivesImage\\";	//저장될 외부 파일 경로
+//        String fileRoot = "C:\\weareAttach\\executivesImage\\";	//저장될 외부 파일 경로
+        String fileRoot = "/sukey0331/tomcat/webapps/executivesImage/";	//저장될 외부 파일 경로
         String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 
         String savedFileName = Utils.getRenameFilename(originalFileName);	//저장될 파일 명
@@ -57,7 +58,7 @@ public class ExecutivesRestController {
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-            jsonObject.addProperty("url", "/weare/ministryImage/"+savedFileName);
+            jsonObject.addProperty("url", "/ministryImage/"+savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
         } catch (IOException e) {

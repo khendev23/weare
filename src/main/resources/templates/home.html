@@ -14,7 +14,7 @@
     </STYLE>
 </head>
 <div layout:fragment="content">
-    <section id="home" class="header" th:style="'background-image: url(/weare/assets/img/header.jpg);'">
+    <section id="home" class="header" th:style="'background-image: url(/assets/img/header.jpg);'">
         <div class="overlay"></div>
 
         <div id="header-carousel" class="carousel slide carousel-fade" data-ride="carousel">
@@ -59,7 +59,7 @@
     <section style="background-color: lightgrey;">
         <div style="padding : 30px 15% 0 15%">
             <div style="display: flex; justify-content: end;">
-                <a th:href="@{kelly}" style="border: 1px solid #3e74bf; background-color: #3e74bf; border-radius: 20px; color: white; padding: 5px; font-size: 1.3rem;">
+                <a th:href="@{/weareKelly}" style="border: 1px solid #3e74bf; background-color: #3e74bf; border-radius: 20px; color: white; padding: 5px; font-size: 1.3rem;">
                     켈리 더보기
                 </a>
             </div>
@@ -93,7 +93,7 @@
             <div id="owl-testmonial" class="owl-carousel owl-theme mt-4">
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{/assets/img/people/yena.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/yena.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">예나 지금이나 예수님의 사랑을 나누는 한예나 입니다.</p>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/daehan.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/daehan.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">복음으로 심플한 삶을 살고파하는 김대한 입니다</p>
@@ -121,7 +121,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/grace.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/grace.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">그리스도의 향기에 물들어 피어오르는 꽃이 은혜입니다.</p>
@@ -149,7 +149,7 @@
 <!--                </div>-->
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/hanseul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/hanseul.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">저는 하나님께 향한 열정으로 불타는 심장을 가진 장한슬입니다.</p>
@@ -163,10 +163,10 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/hangyul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/hangyul.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
-                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));"></p>
+                            <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">이름값하길 바라는 윤한결 청년입니다!</p>
                             <h5 class="ti-quote-left text-right font-weight-bold" style="margin-bottom: 230px;"></h5>
 
                             <div class="line" style="width: 70px; height: 2px; border-radius: 2px; background: #f06161; margin-bottom: 7px; margin-top: -5px;"></div>
@@ -177,7 +177,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/junha.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/junha.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">주나와 함께하시니 부족함 없네, Yeah~♪<br>부족함 없는 주나 입니다★</p>
@@ -191,7 +191,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/junyong.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/junyong.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">겉은 진지 속은 뇌정지 엄준용 입니다.</p>
@@ -205,7 +205,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/mingyu.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/mingyu.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">포브스선정 가만히 있을때 가장 맛있는 남자 지민규 입니다.</p>
@@ -219,7 +219,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/seongkeun.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/seongkeun.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">뚝딱뚝딱 뚝딱이 유파고 유성근 입니다.</p>
@@ -233,7 +233,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/sinae.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/sinae.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">청년부의 따뜻한 햇살 같은 황시내 입니다.</p>
@@ -247,7 +247,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/yongwoo.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/yongwoo.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">은평 미소 담당 김용우 입니다.</p>
@@ -261,7 +261,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/hyunji.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/hyunji.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">하나님이 맡겨주신 아이들에게 사랑을 전하고 싶은 장현지 입니다.</p>
@@ -275,7 +275,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/saehui.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/saehui.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세희:) 우리는’의 금손 주세희 입니다🍀</p>
@@ -289,7 +289,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/hanna.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/hanna.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">흔들림 없는 편안한 이한나 전도사!</p>
@@ -303,7 +303,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/jiseul.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/jiseul.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">은평 비주얼 담당 장지슬 입니다</p>
@@ -317,7 +317,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/museok.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/museok.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">청년부 어부 정무석 입니다!</p>
@@ -331,7 +331,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/seojin.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/seojin.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">저는 공군大836기 홍서진 입니다</p>
@@ -345,7 +345,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/sol.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/sol.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세요^^ 우리는' 청년회의 푸르른 소나무 윤솔 입니다🌲</p>
@@ -359,7 +359,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/taeyang.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/taeyang.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">우리는 동네형 장태양 입니다</p>
@@ -373,7 +373,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/geonyoung.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/geonyoung.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세요! '나는 자유해' 메인댄서 이건영 입니다🤠</p>
@@ -387,7 +387,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/taehwi.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/taehwi.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">안녕하세요. 저는 믿음의 훈련을 하고 있는 강태휘 입니다.</p>
@@ -401,7 +401,7 @@
                 </div>
                 <div class="item">
                     <div style="display: flex; justify-content: center">
-                        <img th:src="@{assets/img/people/ssg.jpg}" style="width: fit-content; height: 33rem;" class="avatar" alt="">
+                        <img src="http://sukey0331.cdn1.cafe24.com/ssg.jpg" style="width: fit-content; height: 33rem;" class="avatar" alt="">
                         <div class="des" style="padding-left: 5%; padding-top: 6%;">
                             <h5 class="ti-quote-left font-weight-bold"></h5>
                             <p style="margin-bottom: 1px; font-size: calc(15px + (15 - 13) * ((100vw - 300px) / (1300 - 300)));">은평 기타리스트, 풋볼러</p>

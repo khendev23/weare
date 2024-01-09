@@ -198,6 +198,7 @@ public class UserController {
         return "user/mypage";
     }
 
+    // 로그인 정보 헤더 전송 메소드
     public void updateModelWithUserInfo(Model model, HttpSession session) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -216,14 +217,16 @@ public class UserController {
 
     }
 
-    @GetMapping("/kelly")
+    @GetMapping("/weareKelly")
     public String getKelly(Model model) {
 
         List<Kelly> getAllKellys = adminService.findAllByOrderByKellyIdDesc();
 
-        List<List<Kelly>> chunkedKellys = Lists.partition(getAllKellys, 2);
+//        List<List<Kelly>> chunkedKellys = Lists.partition(getAllKellys, 2);
 
-        model.addAttribute("kellys", chunkedKellys);
+        log.info("kelly : {}", getAllKellys);
+
+        model.addAttribute("kellys", getAllKellys);
 
         return "user/kelly";
     }

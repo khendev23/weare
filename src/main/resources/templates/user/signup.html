@@ -12,7 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <div layout:fragment="content">
-    <div style="width: 100%; height: 97px; background-color:#2c3e50;"></div>
+    <div style="width: 100%; height: 115px; background-color:#2c3e50;"></div>
     <section style="padding: 5%; background-color:#f1fafb;">
         <div class="container" style="width: 60%;">
             <div class="input-form-backgroud row">
@@ -208,6 +208,8 @@
         </div>
     </section>
     <script>
+        var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
         var isDuplicateChecked = false;
         function checkDuplicate() {
             var userId = $("#userId").val();
@@ -217,18 +219,22 @@
             $.ajax({
                 type: "GET",
                 contentType: "application/json;charset=UTF-8",
-                url: "/weare/signup/checkDuplicatedId.do",
+                url: "/signup/checkDuplicatedId.do",
                 data: { "userId": userId },
                 success: function (response) {
                     console.log("성공");
                     var messageElement = $("#message");
 
-                    if (response) {
-                        messageElement.html("이미 존재하는 아이디입니다.").css("color", "red");
+                    if(userId.length >=4 && userId.length <=12) {
+                        if (response) {
+                            messageElement.html("이미 존재하는 아이디입니다.").css("color", "red");
+                        } else {
+                            messageElement.html("사용 가능한 아이디입니다.").css("color", "blue");
+                            isDuplicateChecked = true;
+                            // 여기에 사용 가능한 아이디에 대한 추가 동작을 수행할 수 있습니다.
+                        }
                     } else {
-                        messageElement.html("사용 가능한 아이디입니다.").css("color", "blue");
-                        isDuplicateChecked = true;
-                        // 여기에 사용 가능한 아이디에 대한 추가 동작을 수행할 수 있습니다.
+                        messageElement.html("4~12 자리로 작성해주세요.").css("color", "red");
                     }
                 }
             });

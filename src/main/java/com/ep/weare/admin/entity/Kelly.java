@@ -16,6 +16,7 @@ public class Kelly {
 
     @Id
     private Integer kellyId;
+    private String bibleVerse;
     private String kellyOriginalFilename;
     private String kellyRenamedFilename;
 

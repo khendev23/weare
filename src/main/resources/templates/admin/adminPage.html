@@ -5,6 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
   <title>WeAreAdmin</title>
   <link rel="stylesheet" th:href="@{assets/css/admin.styles.min.css}"/>
 </head>
@@ -244,7 +246,7 @@
       // jQuery Ajax를 사용하여 서버로 userId를 전송
       $.ajax({
         type: "POST",
-        url: "/weare/admin/approveUser.do",
+        url: "/admin/approveUser.do",
         data: { userId: userId },
         beforeSend: function(xhr){
           xhr.setRequestHeader(header, token);

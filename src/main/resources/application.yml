@@ -12,10 +12,14 @@ spring:
     suffix : .html
     cache : false
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/weare
-    username: root
-    password: mysql
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://gapweare.site:3306/sukey0331
+#    url: jdbc:mariadb://localhost:3306/sukey0331
+#    url: jdbc:mysql://localhost:3308/weare // 테스트용
+#    username: gapweare
+#    password: wntkfkd0715!
+    username: sukey0331
+    password: sk3y1p2@A
   jpa:
     show-sql: true
     hibernate:
@@ -41,7 +45,63 @@ logging:
 file:
   upload:
     directory:
-      kelly: C:/weareAttach/kelly
-      announceAttach: C:/weareAttach/announceAttach
-      ministryAttach: C:/weareAttach/ministryAttach
-      executivesAttach: C:/weareAttach/executivesAttach
+      kelly: /sukey0331/tomcat/webapps/kelly
+      announceAttach: /sukey0331/tomcat/webapps/announceAttach
+      ministryAttach: /sukey0331/tomcat/webapps/ministryAttach
+      executivesAttach: /sukey0331/tomcat/webapps/executivesAttach
+#      kelly: C:/weareAttach/kelly
+#      announceAttach: C:/weareAttach/announceAttach
+#      ministryAttach: C:/weareAttach/ministryAttach
+#      executivesAttach: C:/weareAttach/executivesAttach
+
+## 여기까지 로컬서버 전용 ###
+
+## tomcat
+#server:
+#  port: 8090
+#  servlet:
+#    context-path: /weare
+#
+#
+## spring
+#spring:
+#  thymeleaf:
+#    prefix : classpath:/templates/
+#    suffix : .html
+#    cache : false
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://3.34.53.156:3306/weare?useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root123@A
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
+#  mvc:
+#    converters:
+#      preferred-json-mapper: gson
+#  servlet:
+#    multipart:
+#      max-file-size: 20MB
+#      max-request-size: 20MB
+#
+## logback
+#logging:
+#  level:
+#    root: info
+#    '[com.ep.weare]': debug
+#
+## file
+#file:
+#  upload:
+#    directory:
+#      kelly: /home/ubuntu/files/kelly
+#      announceAttach: /home/ubuntu/files/announceAttach
+#      ministryAttach: /home/ubuntu/files/ministryAttach
+#      executivesAttach: /home/ubuntu/files/executivesAttach
+#
+#### 여기는 배포버전
